@@ -63,6 +63,7 @@ public class Vector2d {
     public Vector2d substract(Vector2d other){
         return new Vector2d(x-other.x,y-other.y);
     }
+
     public boolean equals(Object other){
         if (this == other)
             return true;
