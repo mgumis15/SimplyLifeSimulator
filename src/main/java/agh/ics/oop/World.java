@@ -8,15 +8,11 @@ public class World {
 
 
         System.out.println("system wystartował");
-        OptionsParser parser=new OptionsParser();
-        Animal zwierze = new Animal();
-        System.out.println(zwierze);
-//        String[] strings={"f","x","l","right"};
-        MoveDirection[] directions=parser.parse(args);
-        for (MoveDirection dir:directions) {
-            zwierze.move(dir);
-        }
-        System.out.println(zwierze);
+        MoveDirection[] directions = new OptionsParser().parse(args);
+        IWorldMap map = new RectangularMap(10, 5);
+        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
+        IEngine enegine = new SimulationEngine(directions, map, positions);
+        engine.run();
         System.out.println("system zakończył działanie");
     }
 
