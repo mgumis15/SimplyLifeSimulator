@@ -8,13 +8,13 @@ public class World {
 
 
         System.out.println("system wystartował");
-
+        OptionsParser parser=new OptionsParser();
         Animal zwierze = new Animal();
         System.out.println(zwierze.toString());
-        zwierze.move(MoveDirection.RIGHT);
-//        zwierze.move(MoveDirection.FORWARD);
-//        zwierze.move(MoveDirection.FORWARD);
-//        zwierze.move(MoveDirection.FORWARD);
+        MoveDirection[] directions=parser.parse(args);
+        for (MoveDirection dir:directions) {
+            zwierze.move(dir);
+        }
         System.out.println(zwierze.toString());
         System.out.println("system zakończył działanie");
     }

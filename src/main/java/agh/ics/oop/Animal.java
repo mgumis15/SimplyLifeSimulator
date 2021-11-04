@@ -29,7 +29,9 @@ public class Animal {
                 System.out.println("Jestem w FORWARD "+this.position.toString() );
                 Vector2d nextIT=this.position.add(this.direction.toUnitVector());
                 System.out.println(nextIT.toString());
-                if (nextIT.precedes(this.upperCorner)){
+                if ((nextIT.precedes(this.upperCorner) && nextIT.follows(this.lowerCorner))
+                ||(nextIT.precedes(this.lowerCorner) && nextIT.follows(this.upperCorner))
+                ){
                     System.out.println("Przypisuje wartość");
                     this.position=nextIT;
                     System.out.println("XD: "+this.position.toString());
@@ -40,7 +42,8 @@ public class Animal {
             case BACKWARD:
                 System.out.println("Jestem w BACKWARD "+this.position.toString() );
                 Vector2d prev=this.position.substract(this.direction.toUnitVector());
-                if (prev.follows(lowerCorner)){
+                if ((prev.precedes(this.upperCorner) && prev.follows(this.lowerCorner))
+                        || (prev.precedes(this.lowerCorner) && prev.follows(this.upperCorner))){
                     this.position=prev;
                 };
                 break;
