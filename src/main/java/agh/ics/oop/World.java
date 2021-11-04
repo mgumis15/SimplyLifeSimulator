@@ -10,12 +10,13 @@ public class World {
         System.out.println("system wystartował");
         OptionsParser parser=new OptionsParser();
         Animal zwierze = new Animal();
-        System.out.println(zwierze.toString());
+        System.out.println(zwierze);
+//        String[] strings={"f","x","l","right"};
         MoveDirection[] directions=parser.parse(args);
         for (MoveDirection dir:directions) {
             zwierze.move(dir);
         }
-        System.out.println(zwierze.toString());
+        System.out.println(zwierze);
         System.out.println("system zakończył działanie");
     }
 

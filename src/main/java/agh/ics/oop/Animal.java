@@ -17,30 +17,23 @@ public class Animal {
     public void move(MoveDirection direct){
         switch(direct) {
             case RIGHT:
-                System.out.println("Jestem w Right");
                 this.direction=this.direction.next();
-                System.out.println(this.direction.toString());
                 break;
             case LEFT:
                 this.direction=this.direction.previous();
                 break;
 
             case FORWARD:
-                System.out.println("Jestem w FORWARD "+this.position.toString() );
                 Vector2d nextIT=this.position.add(this.direction.toUnitVector());
-                System.out.println(nextIT.toString());
                 if ((nextIT.precedes(this.upperCorner) && nextIT.follows(this.lowerCorner))
                 ||(nextIT.precedes(this.lowerCorner) && nextIT.follows(this.upperCorner))
                 ){
-                    System.out.println("Przypisuje wartość");
                     this.position=nextIT;
-                    System.out.println("XD: "+this.position.toString());
                 }
                 return;
 
 
             case BACKWARD:
-                System.out.println("Jestem w BACKWARD "+this.position.toString() );
                 Vector2d prev=this.position.substract(this.direction.toUnitVector());
                 if ((prev.precedes(this.upperCorner) && prev.follows(this.lowerCorner))
                         || (prev.precedes(this.lowerCorner) && prev.follows(this.upperCorner))){

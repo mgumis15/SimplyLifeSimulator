@@ -7,30 +7,55 @@ public class OptionsParser {
     public MoveDirection[] parse(String[] strings){
 
 //ZAPYTA O SWITCH CASE W FUNKCJI MAP
-        int len= strings.length;
-        MoveDirection[] directions= new MoveDirection[len];
 
+
+        int len= strings.length;
+        int x=0;
         for (int i=0;i<len;i++) {
             switch (strings[i]){
                 case "f":
                 case "forward":
-                    directions[i]=MoveDirection.FORWARD;
-                    break;
                     case "b":
                 case "backward":
-                    directions[i]=MoveDirection.BACKWARD;
-                    break;
                     case "r":
                 case "right":
-                    directions[i]=MoveDirection.RIGHT;
-                    break;
                     case "l":
                 case "left":
-                    directions[i]=MoveDirection.LEFT;
+                    break;
+                default:
+                    x=x+1;
                     break;
             }
         }
-        return directions;
+        MoveDirection[] output=new MoveDirection[len-x];
+        int j=0;
+        for (int i=0;i<len;i++) {
+            switch (strings[i]){
+                case "f":
+                case "forward":
+                    output[j]=MoveDirection.FORWARD;
+                    j++;
+                    break;
+                case "b":
+                case "backward":
+                    output[j]=MoveDirection.BACKWARD;
+                    j++;
+                    break;
+                case "r":
+                case "right":
+                    output[j]=MoveDirection.RIGHT;
+                    j++;
+                    break;
+                case "l":
+                case "left":
+                    output[j]=MoveDirection.LEFT;
+                    j++;
+                    break;
+                default:
+                    break;
+            }
+        }
+        return output;
     }
 
 }
