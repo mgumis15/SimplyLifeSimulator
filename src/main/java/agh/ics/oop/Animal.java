@@ -21,6 +21,7 @@ public class Animal{
             case SOUTH -> "v";
             default -> "";
         };
+        odp+=this.initialPosition.toString();
         return odp;
 
     }
@@ -42,6 +43,7 @@ public class Animal{
                 Vector2d nextIT=this.initialPosition.add(this.direction.toUnitVector());
                 if (this.map.canMoveTo(nextIT)){
                     this.initialPosition=nextIT;
+                    this.map.place(this);
                 }
                 return;
 
@@ -49,8 +51,10 @@ public class Animal{
                 Vector2d prev=this.initialPosition.substract(this.direction.toUnitVector());
                 if (this.map.canMoveTo(prev)){
                     this.initialPosition=prev;
+                    this.map.place(this);
+
                 };
-                break;
+                return;
             }
         }
 
