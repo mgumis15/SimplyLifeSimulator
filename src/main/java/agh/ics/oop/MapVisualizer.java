@@ -71,8 +71,11 @@ public class MapVisualizer {
 
     private String drawObject(Vector2d currentPosition) {
         String result = null;
+        System.out.println(currentPosition.toString());
         if (this.map.isOccupied(currentPosition)) {
+
             Object object = this.map.objectAt(currentPosition);
+
             if (object != null) {
                 result = object.toString();
             } else {

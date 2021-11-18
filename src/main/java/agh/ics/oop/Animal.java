@@ -45,7 +45,6 @@ public class Animal{
                 }
                 return;
 
-
             case BACKWARD:
                 Vector2d prev=this.initialPosition.substract(this.direction.toUnitVector());
                 if (this.map.canMoveTo(prev)){
