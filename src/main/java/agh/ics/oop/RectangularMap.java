@@ -14,12 +14,15 @@ public class RectangularMap implements IWorldMap{
     public RectangularMap(int width, int height){
         this.width=width;
         this.height=height;
-        this.map=new ArrayList<ArrayList<Animal>>(height);
+        this.map=new ArrayList<ArrayList<Animal>>();
         this.lowerLeft=new Vector2d(0,0);
         this.upperRight=new Vector2d(width-1,height-1);
 
         for (int i=0; i<height;i++){
-            this.map.add(new ArrayList<>(width));
+            this.map.add(new ArrayList<>());
+            for (int j = 0; j <width ; j++) {
+            this.map.get(i).add(null);
+            }
         }
     }
 
@@ -27,8 +30,6 @@ public class RectangularMap implements IWorldMap{
 
     public String toString(){
         MapVisualizer mapVisualizer=new MapVisualizer(this);
-
-        System.out.println("A2");
         return mapVisualizer.draw(this.lowerLeft,this.upperRight);
 
     }
@@ -50,16 +51,14 @@ public class RectangularMap implements IWorldMap{
     public boolean place(Animal animal) {
         if(this.canMoveTo(animal.initialPosition)){
                 this.map.get(animal.initialPosition.y).set(animal.initialPosition.x,animal);
+                return true;
         }
         return false;
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        System.out.println(position.toString());
-        System.out.println(this.map.get(0).get(0).toString());
             if (this.map.get(position.y).get(position.x)!=null){
-
                 return true;
             }
         return false;

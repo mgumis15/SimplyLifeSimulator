@@ -8,20 +8,15 @@ public class World {
 
     public static void main(String[] args) {
 
-
-
-
-
-
         System.out.println("system wystartował");
-        MoveDirection[] directions = new OptionsParser().parse(args);
+        String[] strings={"f", "b", "r", "l"};
+        MoveDirection[] directions = new OptionsParser().parse(strings);
         IWorldMap map = new RectangularMap(10, 5);
-        System.out.println("A1");
+        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
+        IEngine engine = new SimulationEngine(directions, map, positions);
+
+        engine.run();
         System.out.println(map.toString());
-//        System.out.println(map.map.toString());
-//        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
-//        IEngine engine = new SimulationEngine(directions, map, positions);
-//        engine.run();
         System.out.println("system zakończył działanie");
     }
 
