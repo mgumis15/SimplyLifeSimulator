@@ -1,32 +1,33 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GrassField implements IWorldMap{
 
     private int grassN;
-    private int[] corners={-1,-1,-1,-1};
-    private ArrayList<Grass> mapGrass;
-    private ArrayList<Animal> mapAnimals;
+    private Vector2d lowerLeft;
+    private Vector2d upperRight;
+    private ArrayList<Grass> grasses;
+    private ArrayList<Animal> animals;
+
     public GrassField(int grassN){
         this.grassN=grassN;
-        this.mapGrass=new ArrayList<>();
-        this.mapAnimals=new ArrayList<>();
+        this.grasses=new ArrayList<>();
+        this.animals=new ArrayList<>();
         while (this.grassN>0){
         int yR=(int)Math.floor(Math.random()*(Math.sqrt(grassN*10)));
         int xR=(int)Math.floor(Math.random()*(Math.sqrt(grassN*10)));
-            Grass grass=new Grass(new Vector2d(xR,yR));
+        Vector2d newGrassPosition=new Vector2d(xR,yR);
+            Grass grass=new Grass(newGrassPosition);
             if (this.placeGrass(grass)){
-                if(corners[0]==-1){
-                    corners[0]=xR;
-                    corners[1]=yR;
-                    corners[2]=xR;
-                    corners[3]=yR;
+                if(this.grassN==grassN){
+                    this.lowerLeft=new Vector2d(xR,yR);
+                    this.upperRight=new Vector2d(xR,yR);
                 }else{
-                    if(corners[0]>xR) corners[0]=xR;
-                    if(corners[1]>yR) corners[1]=yR;
-                    if(corners[2]<xR) corners[2]=xR;
-                    if(corners[3]<yR) corners[3]=yR;
+
+                    this.upperRight=this.upperRight.upperRight(newGrassPosition);
+                    this.lowerLeft=this.lowerLeft.lowerLeft(newGrassPosition);
                 }
                 this.grassN--;
             }
@@ -36,35 +37,46 @@ public class GrassField implements IWorldMap{
 
 
     public String toString(){
-            int lowX,lowY,upX,upY;
-            lowX=lowY=0;
-            upX=
+
+        System.out.println(this.upperRight.toString());
+        System.out.println(this.lowerLeft.toString());
+        MapVisualizer mapVisualizer=new MapVisualizer(this);
+        return mapVisualizer.draw(this.lowerLeft,this.upperRight);
     }
 
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-    if(position.x>=0&&position.y>=0) {
-        if (!this.isOccupied(position)) {
-            return true;
+        for (Animal animal:this.animals) {
+            if (animal.initialPosition.x==position.x&&animal.initialPosition.y==position.y){
+                return false;
+            }
         }
-    }
-        return false;
+        this.upperRight=this.upperRight.upperRight(position);
+        this.lowerLeft=this.lowerLeft.lowerLeft(position);
+        return true;
     }
 
 
     @Override
     public boolean place(Animal animal){
-        if(this.canMoveTo(animal.initialPosition)){
-            this.mapAnimals.add(animal);
-            return true;
+        for (Animal placedAnimal:this.animals) {
+            if (placedAnimal.initialPosition.x==animal.initialPosition.x
+                    &&placedAnimal.initialPosition.y==animal.initialPosition.y){
+                return false;
+            }
         }
-        return false;
+
+            this.animals.add(animal);
+            this.upperRight=this.upperRight.upperRight(animal.initialPosition);
+            this.lowerLeft=this.lowerLeft.lowerLeft(animal.initialPosition);
+            return true;
 
     }
+
     public boolean placeGrass(Grass grass) {
-        if(this.isOccupiedGrass(grass.position)){
-            this.mapGrass.add(grass);
+        if(!this.isOccupiedGrass(grass.position)){
+            this.grasses.add(grass);
             return true;
         }
         return false;
@@ -72,15 +84,17 @@ public class GrassField implements IWorldMap{
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        for (Animal animal:this.mapAnimals) {
+        for (Animal animal:this.animals) {
             if (animal.initialPosition.x==position.x&&animal.initialPosition.y==position.y){
                 return true;
             }
         }
-        return false;
+        return isOccupiedGrass(position);
     }
+
+
     public boolean isOccupiedGrass(Vector2d position){
-        for (Grass grass:this.mapGrass) {
+        for (Grass grass:this.grasses) {
             if (grass.position.x==position.x&&grass.position.y==position.y){
                 return true;
             }
@@ -90,12 +104,12 @@ public class GrassField implements IWorldMap{
 
     @Override
     public Object objectAt(Vector2d position) {
-        for (Animal animal:this.mapAnimals) {
+        for (Animal animal:this.animals) {
             if (animal.initialPosition.x==position.x&&animal.initialPosition.y==position.y){
                 return animal;
             }
         }
-        for (Grass grass:this.mapGrass) {
+        for (Grass grass:this.grasses) {
             if (grass.position.x==position.x&&grass.position.y==position.y){
                 return grass;
             }

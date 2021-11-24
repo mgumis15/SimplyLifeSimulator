@@ -21,7 +21,6 @@ public class Animal{
             case SOUTH -> "v";
             default -> "";
         };
-        odp+=this.initialPosition.toString();
         return odp;
 
     }
