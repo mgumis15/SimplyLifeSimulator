@@ -2,7 +2,7 @@ package agh.ics.oop;
 
 import java.util.*;
 
-abstract class AbstractWorldMap implements IWorldMap {
+abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
     LinkedHashMap<Vector2d, Animal> animals = new LinkedHashMap<>();
 
     protected Vector2d lowerLeft;
@@ -19,9 +19,9 @@ abstract class AbstractWorldMap implements IWorldMap {
     public boolean place(Animal animal){
         if(this.isOccupied(animal.initialPosition)) return false;
 
-        this.animals.put(animal.initialPosition,animal);
-        Vector2d last=animal.initialPosition.substract(animal.direction.toUnitVector());
-        this.animals.remove(last);
+//        this.animals.put(animal.initialPosition,animal);
+//        Vector2d last=animal.initialPosition.substract(animal.direction.toUnitVector());
+//        this.animals.remove(last);
         this.upperRight=this.upperRight.upperRight(animal.initialPosition);
         this.lowerLeft=this.lowerLeft.lowerLeft(animal.initialPosition);
         return true;
@@ -38,5 +38,9 @@ abstract class AbstractWorldMap implements IWorldMap {
         return animals.get(position);
     }
 
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+            Animal curr=animals.get(oldPosition);
+
+    }
 
 }
