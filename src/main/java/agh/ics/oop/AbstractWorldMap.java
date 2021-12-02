@@ -19,9 +19,7 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
     public boolean place(Animal animal){
         if(this.isOccupied(animal.initialPosition)) return false;
 
-//        this.animals.put(animal.initialPosition,animal);
-//        Vector2d last=animal.initialPosition.substract(animal.direction.toUnitVector());
-//        this.animals.remove(last);
+        this.animals.put(animal.initialPosition,animal);
         this.upperRight=this.upperRight.upperRight(animal.initialPosition);
         this.lowerLeft=this.lowerLeft.lowerLeft(animal.initialPosition);
         return true;
@@ -40,6 +38,8 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
 
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
             Animal curr=animals.get(oldPosition);
+            animals.put(newPosition,curr);
+            animals.remove(oldPosition);
 
     }
 
