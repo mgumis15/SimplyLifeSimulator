@@ -31,7 +31,10 @@ public class RectangularMap extends AbstractWorldMap{
     @Override
     public boolean place(Animal animal) {
         if(this.canMoveTo(animal.initialPosition)){
-            super.animals.add(animal);
+
+            super.animals.put(animal.initialPosition,animal);
+            Vector2d last=animal.initialPosition.substract(animal.direction.toUnitVector());
+            super.animals.remove(last);
             return true;
         }
         return false;
