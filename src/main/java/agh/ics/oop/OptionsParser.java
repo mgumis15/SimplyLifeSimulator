@@ -6,26 +6,27 @@ public class OptionsParser {
 
     public MoveDirection[] parse(String[] strings){
 
-//ZAPYTA O SWITCH CASE W FUNKCJI MAP
-
 
         int len= strings.length;
         int x=0;
+
         for (int i=0;i<len;i++) {
-            switch (strings[i]){
-                case "f":
-                case "forward":
+
+                switch (strings[i]) {
+                    case "f":
+                    case "forward":
                     case "b":
-                case "backward":
+                    case "backward":
                     case "r":
-                case "right":
+                    case "right":
                     case "l":
-                case "left":
-                    break;
-                default:
-                    x=x+1;
-                    break;
-            }
+                    case "left":
+                        break;
+                    default:
+                        x = x + 1;
+                        throw new IllegalArgumentException(strings[i].toString() + " is not legal move specification");
+                }
+
         }
         MoveDirection[] output=new MoveDirection[len-x];
         int j=0;
