@@ -2,50 +2,48 @@ package agh.ics.oop;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 
 public class GrassField extends AbstractWorldMap{
 
     private int grassN;
-    private ArrayList<Grass> grasses;
+    LinkedHashMap<Vector2d, Grass> grasses = new LinkedHashMap<>();
+
 
     public GrassField(int grassN){
         this.grassN=grassN;
-        this.grasses=new ArrayList<>();
         while (this.grassN>0){
-        int yR=(int)Math.floor(Math.random()*(Math.sqrt(grassN*10)));
-        int xR=(int)Math.floor(Math.random()*(Math.sqrt(grassN*10)));
-        Vector2d newGrassPosition=new Vector2d(xR,yR);
-            Grass grass=new Grass(newGrassPosition);
-            if (this.placeGrass(grass)){
-                if(this.grassN==grassN){
-                    super.lowerLeft=new Vector2d(xR,yR);
-                    super.upperRight=new Vector2d(xR,yR);
-                }else{
-
-                    super.upperRight=super.upperRight.upperRight(newGrassPosition);
-                    super.lowerLeft=super.lowerLeft.lowerLeft(newGrassPosition);
+            int yR=(int)Math.floor(Math.random()*(Math.sqrt(grassN*10)));
+            int xR=(int)Math.floor(Math.random()*(Math.sqrt(grassN*10)));
+            Vector2d newGrassPosition=new Vector2d(xR,yR);
+                Grass grass=new Grass(newGrassPosition);
+                if (this.placeGrass(grass)){
+                    this.grassN--;
                 }
-                this.grassN--;
-            }
         }
         this.grassN=grassN;
     }
 
-
+    @Override
+    public boolean place(Animal animal){
+        if(super.isOccupied(animal.initialPosition)){
+            throw new IllegalArgumentException(animal.initialPosition.toString()+" is not legal place to place animal");
+        }
+        super.animals.put(animal.initialPosition,animal);
+        super.mapBoundary.addVector(animal.initialPosition);
+        return true;
+    }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
         if(super.isOccupied(position)) return false;
-
-        super.upperRight=super.upperRight.upperRight(position);
-        super.lowerLeft=super.lowerLeft.lowerLeft(position);
         return true;
     }
 
-
     public boolean placeGrass(Grass grass) {
         if(!this.isOccupiedGrass(grass.position)){
-            this.grasses.add(grass);
+            this.grasses.put(grass.position,grass);
+            super.mapBoundary.addVector(grass.position);
             return true;
         }
         return false;
@@ -53,17 +51,13 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     public boolean isOccupied(Vector2d position) {
+
         if(super.isOccupied(position)) return true;
         return isOccupiedGrass(position);
     }
 
-
     public boolean isOccupiedGrass(Vector2d position){
-        for (Grass grass:this.grasses) {
-            if (grass.position.x==position.x&&grass.position.y==position.y){
-                return true;
-            }
-        }
+        if(this.grasses.containsKey(position))return true;
         return false;
     }
 
@@ -72,11 +66,7 @@ public class GrassField extends AbstractWorldMap{
         Object object=super.objectAt(position);
         if(object!=null) return object;
 
-        for (Grass grass:this.grasses) {
-            if (grass.position.x==position.x&&grass.position.y==position.y){
-                return grass;
-            }
-        }
+        if(this.grasses.containsKey(position))return this.grasses.get(position);
         return null;
     }
 }

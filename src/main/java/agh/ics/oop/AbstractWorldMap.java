@@ -5,30 +5,23 @@ import java.util.*;
 abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
     LinkedHashMap<Vector2d, Animal> animals = new LinkedHashMap<>();
 
-    protected Vector2d lowerLeft;
-    protected Vector2d upperRight;
-
+    public MapBoundary mapBoundary=new MapBoundary();
     public String toString(){
         MapVisualizer mapVisualizer=new MapVisualizer(this);
-        return mapVisualizer.draw(this.lowerLeft,this.upperRight);
-
+        return mapVisualizer.draw(this.mapBoundary.getLowerCorner(), this.mapBoundary.getUpperCorner());
     }
-
 
     public boolean place(Animal animal){
             if(this.isOccupied(animal.initialPosition)){
                 throw new IllegalArgumentException(animal.initialPosition.toString()+" is not legal place to place animal");
             }
             this.animals.put(animal.initialPosition,animal);
-            this.upperRight=this.upperRight.upperRight(animal.initialPosition);
-            this.lowerLeft=this.lowerLeft.lowerLeft(animal.initialPosition);
+            this.mapBoundary.addVector(animal.initialPosition);
             return true;
-
     }
 
-
     public boolean isOccupied(Vector2d position) {
-        if(animals.get(position)!=null)return true;
+        if(this.animals.containsKey(position))return true;
         return false;
     }
 
@@ -40,7 +33,7 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
             Animal curr=animals.get(oldPosition);
             animals.put(newPosition,curr);
             animals.remove(oldPosition);
-
+            this.mapBoundary.positionChanged(oldPosition,newPosition);
     }
 
 }

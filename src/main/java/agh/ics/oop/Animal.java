@@ -48,7 +48,6 @@ public class Animal{
                 if (this.map.canMoveTo(nextIT)){
                     this.positionChanged(this.initialPosition,nextIT);
                     this.initialPosition=nextIT;
-//                    this.map.place(this);
                 }
                 return;
 

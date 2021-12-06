@@ -1,5 +1,7 @@
 package agh.ics.oop;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 
 public class Vector2d {
@@ -86,4 +88,6 @@ public class Vector2d {
     public Vector2d opposite(){
         return new Vector2d(this.y,this.x);
     }
+
+
 }

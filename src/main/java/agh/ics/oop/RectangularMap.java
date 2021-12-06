@@ -11,8 +11,12 @@ public class RectangularMap extends AbstractWorldMap{
     public RectangularMap(int width, int height){
         this.width=width;
         this.height=height;
-        super.lowerLeft=new Vector2d(0,0);
-        super.upperRight=new Vector2d(width-1,height-1);
+        Vector2d lowerCorner=new Vector2d(0,0);
+        Vector2d upperCorner=new Vector2d(width-1,height-1);
+        super.mapBoundary.ssX.add(lowerCorner);
+        super.mapBoundary.ssX.add(upperCorner);
+        super.mapBoundary.ssY.add(lowerCorner);
+        super.mapBoundary.ssY.add(upperCorner);
     }
 
 
@@ -28,16 +32,5 @@ public class RectangularMap extends AbstractWorldMap{
         return false;
     }
 
-    @Override
-    public boolean place(Animal animal) {
-        if(this.canMoveTo(animal.initialPosition)){
-
-            super.animals.put(animal.initialPosition,animal);
-            Vector2d last=animal.initialPosition.substract(animal.direction.toUnitVector());
-            super.animals.remove(last);
-            return true;
-        }
-        return false;
-    }
 
 }
