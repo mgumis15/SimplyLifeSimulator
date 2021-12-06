@@ -38,6 +38,7 @@ public class App extends Application {
         Label label = new Label("Zwierzak");
 
         GridPane grid = new GridPane();
+
         GridMapVisualizer mapVisualizer=new GridMapVisualizer(this.map,grid);
         mapVisualizer.draw(this.map.mapBoundary.getLowerCorner(),this.map.mapBoundary.getUpperCorner());
 
