@@ -11,18 +11,20 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+
 public class App extends Application {
     protected MoveDirection[] directions;
-    protected GrassField map;
-//    protected  RectangularMap map ;
+//    protected GrassField map;
+    protected  RectangularMap map ;
     protected Vector2d[] positions;
     protected IEngine engine;
     public void init(){
         try {
             System.out.println("system wystartował");
             this.directions = new OptionsParser().parse(getParameters().getRaw().toArray(new String[0]));
-//          this.map= new RectangularMap(10, 5);
-            this.map = new GrassField(10);
+          this.map= new RectangularMap(10, 5);
+//            this.map = new GrassField(10);
             this.positions = new Vector2d[]{new Vector2d(2, 2), new Vector2d(3, 4)};
             this.engine = new SimulationEngine(this.directions, this.map, this.positions);
             System.out.println(map.toString());
@@ -40,7 +42,12 @@ public class App extends Application {
         GridPane grid = new GridPane();
 
         GridMapVisualizer mapVisualizer=new GridMapVisualizer(this.map,grid);
+        try{
+
         mapVisualizer.draw(this.map.mapBoundary.getLowerCorner(),this.map.mapBoundary.getUpperCorner());
+        }catch (FileNotFoundException ex){
+            System.out.println(ex.toString());
+        }
 
 
         grid.setGridLinesVisible(true);

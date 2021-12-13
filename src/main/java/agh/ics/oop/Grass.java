@@ -12,7 +12,10 @@ public class Grass {
     }
 
     @Override
+//    public String toString(){
+//        return "*";
+//    }
     public String toString(){
-        return "*";
+        return "src/main/resources/grass.png";
     }
 }
