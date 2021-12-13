@@ -71,7 +71,6 @@ public class Animal implements IMapElement{
                 return;
             }
         }
-
     void addObserver(IPositionChangeObserver observer){
         observers.add(observer);
     }

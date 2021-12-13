@@ -11,7 +11,8 @@ public class SimulationEngineTest {
         MoveDirection[] directions = new OptionsParser().parse(strings);
         RectangularMap map = new RectangularMap(10, 5);
         Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4),new Vector2d(2,2) };
-        SimulationEngine engine = new SimulationEngine(directions, map, positions);
+        SimulationEngine engine = new SimulationEngine( map, positions);
+        engine.setDirections(directions);
         assertEquals(engine.animals.size(),2);
         engine.run();
 

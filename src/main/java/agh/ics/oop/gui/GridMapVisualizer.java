@@ -1,12 +1,14 @@
-package gui;
+package agh.ics.oop.gui;
 
 import agh.ics.oop.IMapElement;
 import agh.ics.oop.IWorldMap;
 import agh.ics.oop.Vector2d;
 import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -20,10 +22,10 @@ public class GridMapVisualizer {
     public GridMapVisualizer(IWorldMap map, GridPane grid) {
         this.map = map;
         this.grid=grid;
+
     }
 
     public void draw(Vector2d lowerLeft, Vector2d upperRight) throws FileNotFoundException {
-
         this.drawHeader( lowerLeft,  upperRight);
         for (int i = upperRight.y; i >= lowerLeft.y ; i--) {
             Text headerX=new Text(String.valueOf(i));
@@ -48,12 +50,14 @@ public class GridMapVisualizer {
     private void drawHeader(Vector2d lowerLeft, Vector2d upperRight) {
         Text header=new Text(" y\\x ");
         this.grid.getColumnConstraints().add(new ColumnConstraints(25));
+        this.grid.getRowConstraints().add(new RowConstraints(25));
         this.grid.add(header,0,0);
         this.grid.setHalignment(header, HPos.CENTER);
         for (int j = lowerLeft.x; j < upperRight.x +1; j++) {
             Text headerX=new Text(String.valueOf(j));
             this.grid.add(headerX,j-lowerLeft.x+1,0);
             this.grid.getColumnConstraints().add(new ColumnConstraints(25));
+            this.grid.getRowConstraints().add(new RowConstraints(25));
             this.grid.setHalignment(headerX, HPos.CENTER);
         }
     }

@@ -1,8 +1,7 @@
 package agh.ics.oop;
 
-import gui.App;
+import agh.ics.oop.gui.App;
 import javafx.application.Application;
-import java.util.ArrayList;
 
 public class World {
 

@@ -1,4 +1,4 @@
-package gui;
+package agh.ics.oop.gui;
 
 import agh.ics.oop.IMapElement;
 import agh.ics.oop.Vector2d;
