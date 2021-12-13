@@ -26,11 +26,11 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     public boolean place(Animal animal){
-        if(super.isOccupied(animal.initialPosition)){
-            throw new IllegalArgumentException(animal.initialPosition.toString()+" is not legal place to place animal");
+        if(super.isOccupied(animal.position)){
+            throw new IllegalArgumentException(animal.position.toString()+" is not legal place to place animal");
         }
-        super.animals.put(animal.initialPosition,animal);
-        super.mapBoundary.addVector(animal.initialPosition);
+        super.animals.put(animal.position,animal);
+        super.mapBoundary.addVector(animal.position);
         return true;
     }
 

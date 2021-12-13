@@ -1,8 +1,8 @@
 package agh.ics.oop;
 
-public class Grass {
+public class Grass implements IMapElement{
 
-    Vector2d position;
+    public Vector2d position;
     public Grass(Vector2d position){
         this.position=position;
     }
@@ -12,10 +12,10 @@ public class Grass {
     }
 
     @Override
-//    public String toString(){
-//        return "*";
-//    }
     public String toString(){
+        return "*";
+    }
+    public String getUrl(){
         return "src/main/resources/grass.png";
     }
 }

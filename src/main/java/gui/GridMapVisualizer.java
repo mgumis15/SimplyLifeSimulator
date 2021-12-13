@@ -1,5 +1,6 @@
 package gui;
 
+import agh.ics.oop.IMapElement;
 import agh.ics.oop.IWorldMap;
 import agh.ics.oop.Vector2d;
 import javafx.geometry.HPos;
@@ -52,7 +53,7 @@ public class GridMapVisualizer {
         for (int j = lowerLeft.x; j < upperRight.x +1; j++) {
             Text headerX=new Text(String.valueOf(j));
             this.grid.add(headerX,j-lowerLeft.x+1,0);
-            this.grid.getColumnConstraints().add(new ColumnConstraints(15));
+            this.grid.getColumnConstraints().add(new ColumnConstraints(25));
             this.grid.setHalignment(headerX, HPos.CENTER);
         }
     }
@@ -61,7 +62,7 @@ public class GridMapVisualizer {
         if (this.map.isOccupied(currentPosition)) {
             Object object = this.map.objectAt(currentPosition);
             if (object != null) {
-                GuiElementBox elBox=new GuiElementBox(object.toString(),currentPosition);
+                GuiElementBox elBox=new GuiElementBox((IMapElement) object,currentPosition);
                 return elBox.getBox();
             } else {
                 return null;

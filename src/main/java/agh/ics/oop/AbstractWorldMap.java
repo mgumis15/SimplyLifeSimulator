@@ -12,11 +12,11 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
     }
 
     public boolean place(Animal animal){
-            if(this.isOccupied(animal.initialPosition)){
-                throw new IllegalArgumentException(animal.initialPosition.toString()+" is not legal place to place animal");
+            if(this.isOccupied(animal.position)){
+                throw new IllegalArgumentException(animal.position.toString()+" is not legal place to place animal");
             }
-            this.animals.put(animal.initialPosition,animal);
-            this.mapBoundary.addVector(animal.initialPosition);
+            this.animals.put(animal.position,animal);
+            this.mapBoundary.addVector(animal.position);
             return true;
     }
 

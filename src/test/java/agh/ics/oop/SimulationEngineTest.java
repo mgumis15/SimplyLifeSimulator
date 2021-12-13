@@ -15,8 +15,8 @@ public class SimulationEngineTest {
         assertEquals(engine.animals.size(),2);
         engine.run();
 
-        assertEquals(engine.animals.get(0).initialPosition,new Vector2d(2,0));
-        assertEquals(engine.animals.get(1).initialPosition,new Vector2d(3,4));
+        assertEquals(engine.animals.get(0).position,new Vector2d(2,0));
+        assertEquals(engine.animals.get(1).position,new Vector2d(3,4));
 
     }
 }
