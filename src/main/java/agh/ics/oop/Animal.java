@@ -19,11 +19,18 @@ public class Animal{
 
 
     public String toString(){
+//        String odp=switch (this.direction){
+//            case NORTH -> "^";
+//            case EAST -> ">";
+//            case WEST -> "<";
+//            case SOUTH -> "v";
+//            default -> "";
+//        };
         String odp=switch (this.direction){
-            case NORTH -> "^";
-            case EAST -> ">";
-            case WEST -> "<";
-            case SOUTH -> "v";
+            case NORTH -> "src/main/resources/up.png";
+            case EAST -> "src/main/resources/left.png";
+            case WEST -> "src/main/resources/right.png";
+            case SOUTH -> "src/main/resources/down.png";
             default -> "";
         };
         return odp;

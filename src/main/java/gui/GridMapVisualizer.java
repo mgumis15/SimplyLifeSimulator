@@ -6,7 +6,10 @@ import javafx.geometry.HPos;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+import java.io.FileNotFoundException;
 
 public class GridMapVisualizer {
     private IWorldMap map;
@@ -18,7 +21,7 @@ public class GridMapVisualizer {
         this.grid=grid;
     }
 
-    public void draw(Vector2d lowerLeft, Vector2d upperRight) {
+    public void draw(Vector2d lowerLeft, Vector2d upperRight) throws FileNotFoundException {
 
         this.drawHeader( lowerLeft,  upperRight);
         for (int i = upperRight.y; i >= lowerLeft.y ; i--) {
@@ -27,9 +30,14 @@ public class GridMapVisualizer {
             this.grid.setHalignment(headerX, HPos.CENTER);
             for (int j = lowerLeft.x; j <= upperRight.x + 1; j++) {
                     if (j <= upperRight.x) {
-                        Text object=new Text(drawObject(new Vector2d(j, i)));
-                        this.grid.add(object,j-lowerLeft.x+ 1,upperRight.y-i+1);
-                        this.grid.setHalignment(object, HPos.CENTER);
+                        VBox image=drawObject(new Vector2d(j, i));
+
+                        if(image!=null){
+                            this.grid.add(image,j-lowerLeft.x+ 1,upperRight.y-i+1);
+                            this.grid.setHalignment(image, HPos.CENTER);
+                        }else{
+                            this.grid.add(new Text(" "),j-lowerLeft.x+ 1,upperRight.y-i+1);
+                        }
                     }
             }
 
@@ -49,18 +57,17 @@ public class GridMapVisualizer {
         }
     }
 
-    private String drawObject(Vector2d currentPosition) {
-        String result = null;
+    private VBox drawObject(Vector2d currentPosition) throws FileNotFoundException {
         if (this.map.isOccupied(currentPosition)) {
             Object object = this.map.objectAt(currentPosition);
             if (object != null) {
-                result = object.toString();
+                GuiElementBox elBox=new GuiElementBox(object.toString(),currentPosition);
+                return elBox.getBox();
             } else {
-                result = " ";
+                return null;
             }
         } else {
-            result = " ";
+            return null;
         }
-        return result;
     }
 }
