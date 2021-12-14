@@ -3,9 +3,17 @@ package agh.ics.oop;
 import java.util.*;
 
 abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
-    LinkedHashMap<Vector2d, Animal> animals = new LinkedHashMap<>();
+    protected LinkedHashMap<Vector2d, Animal> animals = new LinkedHashMap<>();
+    protected LinkedHashMap<Vector2d, Grass> grasses = new LinkedHashMap<>();
+    protected int width;
+    protected int height;
+    protected int jungleRatio;
+    public MapBoundary mapBoundary;
 
-    public MapBoundary mapBoundary=new MapBoundary();
+    public AbstractWorldMap(int width,int height,int jungleRatio){
+        this.mapBoundary=new MapBoundary(this.width,this.height,this.jungleRatio);
+    }
+
     public String toString(){
         MapVisualizer mapVisualizer=new MapVisualizer(this);
         return mapVisualizer.draw(this.mapBoundary.getLowerCorner(), this.mapBoundary.getUpperCorner());
@@ -16,7 +24,7 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
                 throw new IllegalArgumentException(animal.position.toString()+" is not legal place to place animal");
             }
             this.animals.put(animal.position,animal);
-            this.mapBoundary.addVector(animal.position);
+
             return true;
     }
 
@@ -33,7 +41,6 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
             Animal curr=animals.get(oldPosition);
             animals.put(newPosition,curr);
             animals.remove(oldPosition);
-            this.mapBoundary.positionChanged(oldPosition,newPosition);
     }
 
 }

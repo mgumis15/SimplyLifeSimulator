@@ -3,25 +3,16 @@ package agh.ics.oop.gui;
 import agh.ics.oop.*;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 
 public class App extends Application  {
 
-    protected GrassField map;
+    protected NoBoundariesMap map;
 //    protected  RectangularMap map ;
     protected Vector2d[] positions;
     public IEngine engine;
@@ -29,10 +20,11 @@ public class App extends Application  {
     protected GridMapVisualizer mapVisualizer;
     public void init(){
         try {
+
             System.out.println("system wystartował");
             this.grid=new GridPane();
 //          this.map= new RectangularMap(10, 5);
-            this.map = new GrassField(10);
+            this.map = new NoBoundariesMap(10);
             this.positions = new Vector2d[]{new Vector2d(2, 2), new Vector2d(3, 4)};
             this.engine = new SimulationEngine( this.map, this.positions);
             this.engine.addObserver(this);
@@ -49,14 +41,12 @@ public class App extends Application  {
         System.out.println("Odpalamy grafę");
         Menu menu=new Menu();
         VBox menuBox=menu.getMenu();
+
         menu.start.setOnAction(action->{
             Thread engineThread = new Thread((Runnable) this.engine);
             engineThread.start();
         });
 
-//        start.setOnAction(action->{
-
-//        });
 
 
 

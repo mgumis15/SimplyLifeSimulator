@@ -4,25 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 
-public class GrassField extends AbstractWorldMap{
+public class NoBoundariesMap extends AbstractWorldMap{
 
-    private int grassN;
-    LinkedHashMap<Vector2d, Grass> grasses = new LinkedHashMap<>();
-
-
-    public GrassField(int grassN){
-        this.grassN=grassN;
-        while (this.grassN>0){
-            int yR=(int)Math.floor(Math.random()*(Math.sqrt(grassN*10)));
-            int xR=(int)Math.floor(Math.random()*(Math.sqrt(grassN*10)));
-            Vector2d newGrassPosition=new Vector2d(xR,yR);
-                Grass grass=new Grass(newGrassPosition);
-                if (this.placeGrass(grass)){
-                    this.grassN--;
-                }
-        }
-        this.grassN=grassN;
+    public NoBoundariesMap(int width, int height, int jungleRatio){
+        super(width,height,jungleRatio);
     }
+
+
 
     @Override
     public boolean place(Animal animal){
@@ -30,7 +18,6 @@ public class GrassField extends AbstractWorldMap{
             throw new IllegalArgumentException(animal.position.toString()+" is not legal place to place animal");
         }
         super.animals.put(animal.position,animal);
-        super.mapBoundary.addVector(animal.position);
         return true;
     }
 
@@ -43,7 +30,6 @@ public class GrassField extends AbstractWorldMap{
     public boolean placeGrass(Grass grass) {
         if(!this.isOccupiedGrass(grass.position)){
             this.grasses.put(grass.position,grass);
-            super.mapBoundary.addVector(grass.position);
             return true;
         }
         return false;
