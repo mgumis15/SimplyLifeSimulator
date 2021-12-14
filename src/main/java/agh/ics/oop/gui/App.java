@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -46,19 +47,17 @@ public class App extends Application  {
     @Override
     public void start(Stage primaryStage){
         System.out.println("Odpalamy grafę");
-        Text label = new Text("Argumenty: ");
-
-        label.setTextAlignment(TextAlignment.CENTER);
-        TextField args=new TextField();
-        Button start=new Button("Start");
-        start.setOnAction(action->{
-            MoveDirection[] directions=new OptionsParser().parse(args.getText().split(" "));
-            this.engine.setDirections(directions);
+        Menu menu=new Menu();
+        VBox menuBox=menu.getMenu();
+        menu.start.setOnAction(action->{
             Thread engineThread = new Thread((Runnable) this.engine);
             engineThread.start();
         });
-        VBox box=new VBox(label,args,start,this.grid);
-        box.setSpacing(10);
+
+//        start.setOnAction(action->{
+
+//        });
+
 
 
 
@@ -74,7 +73,7 @@ public class App extends Application  {
 
 
 
-        Scene scene = new Scene(box, 600, 800);
+        Scene scene = new Scene(menuBox, 600, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
 

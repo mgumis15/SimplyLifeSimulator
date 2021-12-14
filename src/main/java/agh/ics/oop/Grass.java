@@ -3,6 +3,7 @@ package agh.ics.oop;
 public class Grass implements IMapElement{
 
     public Vector2d position;
+    public int energy;
     public Grass(Vector2d position){
         this.position=position;
     }

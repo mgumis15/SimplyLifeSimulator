@@ -5,8 +5,10 @@ import java.util.ArrayList;
 public class Animal implements IMapElement{
 
     public Vector2d position;
-    public IWorldMap map;
     public MapDirection direction;
+    public int energy;
+    private IWorldMap map;
+    private int[] genes;
     private ArrayList<IPositionChangeObserver>  observers;
     public Animal(IWorldMap map, Vector2d position){
         this.map=map;
