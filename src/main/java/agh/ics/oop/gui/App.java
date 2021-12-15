@@ -23,12 +23,12 @@ public class App extends Application  {
 
             System.out.println("system wystartował");
             this.grid=new GridPane();
-//          this.map= new RectangularMap(10, 5);
-            this.map = new NoBoundariesMap(10);
-            this.positions = new Vector2d[]{new Vector2d(2, 2), new Vector2d(3, 4)};
-            this.engine = new SimulationEngine( this.map, this.positions);
-            this.engine.addObserver(this);
-            this.engine.setDelay(1000);
+////          this.map= new RectangularMap(10, 5);
+//            this.map = new NoBoundariesMap(10);
+//            this.positions = new Vector2d[]{new Vector2d(2, 2), new Vector2d(3, 4)};
+//            this.engine = new SimulationEngine( this.map, this.positions);
+//            this.engine.addObserver(this);
+//            this.engine.setDelay(1000);
 
 //            System.out.println(map.toString());
             System.out.println("system zakończył działanie");

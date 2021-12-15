@@ -3,7 +3,7 @@ package agh.ics.oop;
 import java.util.*;
 
 abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
-    protected LinkedHashMap<Vector2d, Animal> animals = new LinkedHashMap<>();
+    protected LinkedHashMap<Vector2d, ArrayList<Animal>> animals = new LinkedHashMap<>();
     protected LinkedHashMap<Vector2d, Grass> grasses = new LinkedHashMap<>();
     protected int width;
     protected int height;
@@ -11,20 +11,22 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
     public MapBoundary mapBoundary;
 
     public AbstractWorldMap(int width,int height,int jungleRatio){
+        this.width=width;
+        this.height=height;
+        this.jungleRatio=jungleRatio;
         this.mapBoundary=new MapBoundary(this.width,this.height,this.jungleRatio);
     }
 
-    public String toString(){
-        MapVisualizer mapVisualizer=new MapVisualizer(this);
-        return mapVisualizer.draw(this.mapBoundary.getLowerCorner(), this.mapBoundary.getUpperCorner());
-    }
+//    public String toString(){
+//        MapVisualizer mapVisualizer=new MapVisualizer(this);
+//        return mapVisualizer.draw(this.mapBoundary.getLowerCorner(), this.mapBoundary.getUpperCorner());
+//    }
 
     public boolean place(Animal animal){
             if(this.isOccupied(animal.position)){
                 throw new IllegalArgumentException(animal.position.toString()+" is not legal place to place animal");
             }
             this.animals.put(animal.position,animal);
-
             return true;
     }
 
@@ -33,9 +35,12 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
         return false;
     }
 
-    public Object objectAt(Vector2d position) {
+    public ArrayList<Animal> animalsAt(Vector2d position) {
+        ArrayList<Animal> animalsOn=new ArrayList<Animal>();
+
         return animals.get(position);
     }
+
 
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
             Animal curr=animals.get(oldPosition);

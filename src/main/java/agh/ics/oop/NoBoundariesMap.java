@@ -49,10 +49,10 @@ public class NoBoundariesMap extends AbstractWorldMap{
 
     @Override
     public Object objectAt(Vector2d position) {
-        Object object=super.objectAt(position);
-        if(object!=null) return object;
-
-        if(this.grasses.containsKey(position))return this.grasses.get(position);
+//        Object object=super.objectAt(position);
+//        if(object!=null) return object;
+//
+//        if(this.grasses.containsKey(position))return this.grasses.get(position);
         return null;
     }
 }

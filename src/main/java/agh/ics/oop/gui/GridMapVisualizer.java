@@ -4,7 +4,6 @@ import agh.ics.oop.IMapElement;
 import agh.ics.oop.IWorldMap;
 import agh.ics.oop.Vector2d;
 import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 

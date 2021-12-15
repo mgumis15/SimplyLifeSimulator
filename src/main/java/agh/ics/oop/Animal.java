@@ -1,21 +1,28 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Animal implements IMapElement{
 
     public Vector2d position;
-    public MapDirection direction;
+    public MoveDirection direction;
     public int energy;
     private IWorldMap map;
-    private int[] genes;
+    private ArrayList<Integer> genes;
     private ArrayList<IPositionChangeObserver>  observers;
-    public Animal(IWorldMap map, Vector2d position){
+    public Animal(IWorldMap map, Vector2d position, int energy){
         this.map=map;
         this.observers=new ArrayList<>();
         this.addObserver((IPositionChangeObserver) map);
         this.position=position;
-        this.direction=MapDirection.NORTH;
+        this.energy=energy;
+        this.direction=new Random().nextInt(8);
+        this.genes=new ArrayList<Integer>(32);
+        for (int i = 0; i < 32; i++) {
+            this.genes.set(i, new Random().nextInt(8));
+
+        }
     }
 
 
