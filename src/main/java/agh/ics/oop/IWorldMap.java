@@ -12,5 +12,7 @@ public interface IWorldMap {
     boolean isOccupied(Vector2d position);
 
 
-    Object objectAt(Vector2d position);
+    Object objectAt(Vector2d currentPosition);
+
+    boolean generateGrass(int grassOnStart);
 }

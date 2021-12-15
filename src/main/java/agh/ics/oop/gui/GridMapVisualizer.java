@@ -1,5 +1,6 @@
 package agh.ics.oop.gui;
 
+import agh.ics.oop.Animal;
 import agh.ics.oop.IMapElement;
 import agh.ics.oop.IWorldMap;
 import agh.ics.oop.Vector2d;
@@ -9,6 +10,8 @@ import javafx.scene.layout.GridPane;
 
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
@@ -32,11 +35,11 @@ public class GridMapVisualizer {
             this.grid.setHalignment(headerX, HPos.CENTER);
             for (int j = lowerLeft.x; j <= upperRight.x + 1; j++) {
                     if (j <= upperRight.x) {
-                        VBox image=drawObject(new Vector2d(j, i));
+                        Rectangle rect=drawObject(new Vector2d(j, i));
 
-                        if(image!=null){
-                            this.grid.add(image,j-lowerLeft.x+ 1,upperRight.y-i+1);
-                            this.grid.setHalignment(image, HPos.CENTER);
+                        if(rect!=null){
+                            this.grid.add(rect,j-lowerLeft.x+ 1,upperRight.y-i+1);
+                            this.grid.setHalignment(rect, HPos.CENTER);
                         }else{
                             this.grid.add(new Text(" "),j-lowerLeft.x+ 1,upperRight.y-i+1);
                         }
@@ -61,12 +64,19 @@ public class GridMapVisualizer {
         }
     }
 
-    private VBox drawObject(Vector2d currentPosition) throws FileNotFoundException {
+    private Rectangle drawObject(Vector2d currentPosition) throws FileNotFoundException {
         if (this.map.isOccupied(currentPosition)) {
             Object object = this.map.objectAt(currentPosition);
             if (object != null) {
-                GuiElementBox elBox=new GuiElementBox((IMapElement) object,currentPosition);
-                return elBox.getBox();
+                Rectangle rect = new Rectangle();
+                rect.setWidth(25);
+                rect.setHeight(25);
+                if (object instanceof Animal) {
+                    rect.setStroke(Color.ORANGE);
+                }else{
+                    rect.setStroke(Color.DARKGREEN);
+                }
+                return rect;
             } else {
                 return null;
             }

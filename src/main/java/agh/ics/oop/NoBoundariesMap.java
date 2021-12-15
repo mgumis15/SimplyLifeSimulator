@@ -11,48 +11,20 @@ public class NoBoundariesMap extends AbstractWorldMap{
     }
 
 
-
-    @Override
-    public boolean place(Animal animal){
-        if(super.isOccupied(animal.position)){
-            throw new IllegalArgumentException(animal.position.toString()+" is not legal place to place animal");
-        }
-        super.animals.put(animal.position,animal);
-        return true;
-    }
-
     @Override
     public boolean canMoveTo(Vector2d position) {
-        if(super.isOccupied(position)) return false;
-        return true;
-    }
-
-    public boolean placeGrass(Grass grass) {
-        if(!this.isOccupiedGrass(grass.position)){
-            this.grasses.put(grass.position,grass);
+            if(position.x>=super.width)
+                position.x=0;
+            if(position.x<0)
+                position.x=width-1;
+            if(position.y>=super.height)
+                position.y=0;
+            if(position.y<0)
+                position.y=height-1;
             return true;
-        }
-        return false;
     }
 
-    @Override
-    public boolean isOccupied(Vector2d position) {
 
-        if(super.isOccupied(position)) return true;
-        return isOccupiedGrass(position);
-    }
 
-    public boolean isOccupiedGrass(Vector2d position){
-        if(this.grasses.containsKey(position))return true;
-        return false;
-    }
 
-    @Override
-    public Object objectAt(Vector2d position) {
-//        Object object=super.objectAt(position);
-//        if(object!=null) return object;
-//
-//        if(this.grasses.containsKey(position))return this.grasses.get(position);
-        return null;
-    }
 }

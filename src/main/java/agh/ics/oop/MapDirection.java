@@ -24,17 +24,28 @@ public enum MapDirection {
         }
     }
 
-    public MapDirection next(){
-        switch(this) {
-            case NORTH: return NORTH_EAST;
-            case NORTH_EAST: return EAST;
-            case EAST: return SOUTH_EAST;
-            case SOUTH_EAST: return SOUTH;
-            case SOUTH: return SOUTH_WEST;
-            case SOUTH_WEST: return WEST;
-            case WEST: return NORTH_WEST;
-            default: return NORTH_WEST;
+    public MapDirection next(int direct){
+        for (int i = 0; i < direct; i++) {
+            switch (this) {
+                case NORTH:
+                    return NORTH_EAST;
+                case NORTH_EAST:
+                    return EAST;
+                case EAST:
+                    return SOUTH_EAST;
+                case SOUTH_EAST:
+                    return SOUTH;
+                case SOUTH:
+                    return SOUTH_WEST;
+                case SOUTH_WEST:
+                    return WEST;
+                case WEST:
+                    return NORTH_WEST;
+                default:
+                    return NORTH;
+            }
         }
+        return this;
     }
 
 //    public MapDirection previous(){

@@ -21,5 +21,4 @@ public interface IEngine {
 
     void setDelay(int i);
 
-    void setDirections(MoveDirection[] directions);
 }

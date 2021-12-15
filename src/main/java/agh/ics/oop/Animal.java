@@ -6,10 +6,10 @@ import java.util.Random;
 public class Animal implements IMapElement{
 
     public Vector2d position;
-    public MoveDirection direction;
+    public MapDirection direction;
     public int energy;
+    public ArrayList<Integer> genes;
     private IWorldMap map;
-    private ArrayList<Integer> genes;
     private ArrayList<IPositionChangeObserver>  observers;
     public Animal(IWorldMap map, Vector2d position, int energy){
         this.map=map;
@@ -17,8 +17,10 @@ public class Animal implements IMapElement{
         this.addObserver((IPositionChangeObserver) map);
         this.position=position;
         this.energy=energy;
-        this.direction=new Random().nextInt(8);
+        this.direction=MapDirection.NORTH;
         this.genes=new ArrayList<Integer>(32);
+        int randomDirection=new Random().nextInt(8);
+        this.direction=this.direction.next(randomDirection);
         for (int i = 0; i < 32; i++) {
             this.genes.set(i, new Random().nextInt(8));
 
@@ -26,60 +28,38 @@ public class Animal implements IMapElement{
     }
 
 
-
-    public String toString(){
-        String odp=switch (this.direction){
-            case NORTH -> "^";
-            case EAST -> ">";
-            case WEST -> "<";
-            case SOUTH -> "v";
-            default -> "";
-        };
-        return odp;
+    public int getEnergy() {
+        return energy;
     }
 
-    public String getUrl(){
-        String odp=switch (this.direction){
-            case NORTH -> "src/main/resources/up.png";
-            case EAST -> "src/main/resources/left.png";
-            case WEST -> "src/main/resources/right.png";
-            case SOUTH -> "src/main/resources/down.png";
-            default -> "";
-        };
-        return odp;
+    public ArrayList<Integer> getGenes() {
+        return genes;
     }
 
     private boolean isAt(Vector2d position2){
             return this.position.equals(position2);
     }
 
-    public void move(MoveDirection direct){
-        switch(direct) {
-            case RIGHT:
-                this.direction=this.direction.next();
-                break;
-            case LEFT:
-                this.direction=this.direction.previous();
-                break;
-
-            case FORWARD:
-                Vector2d nextIT=this.position.add(this.direction.toUnitVector());
-                if (this.map.canMoveTo(nextIT)){
-                    this.positionChanged(this.position,nextIT);
-                    this.position=nextIT;
-                }
-                return;
-
-            case BACKWARD:
-                Vector2d prev=this.position.substract(this.direction.toUnitVector());
-                if (this.map.canMoveTo(prev)){
-                    this.positionChanged(this.position,prev);
-                    this.position=prev;
-
-                };
-                return;
-            }
+    public void move(){
+        int ind=new Random().nextInt(32);
+        int direct=this.genes.get(ind);
+        if(direct==0){
+            Vector2d nextIT=this.position.add(this.direction.toUnitVector());
+            if (this.map.canMoveTo(nextIT)){
+                this.positionChanged(this.position,nextIT);
+                this.position=nextIT;
+            };
+        }else if(direct==4){
+            Vector2d prev=this.position.substract(this.direction.toUnitVector());
+            if (this.map.canMoveTo(prev)){
+                this.positionChanged(this.position,prev);
+                this.position=prev;
+            };
+        }else{
+                this.direction=this.direction.next(direct);
         }
+    }
+
     void addObserver(IPositionChangeObserver observer){
         observers.add(observer);
     }
@@ -91,6 +71,29 @@ public class Animal implements IMapElement{
             observer.positionChanged(oldPosition,newPosition);
         }
     }
+
+
+//    public String toString(){
+//        String odp=switch (this.direction){
+//            case NORTH -> "^";
+//            case EAST -> ">";
+//            case WEST -> "<";
+//            case SOUTH -> "v";
+//            default -> "";
+//        };
+//        return odp;
+//    }
+
+//    public String getUrl(){
+//        String odp=switch (this.direction){
+//            case NORTH -> "src/main/resources/up.png";
+//            case EAST -> "src/main/resources/left.png";
+//            case WEST -> "src/main/resources/right.png";
+//            case SOUTH -> "src/main/resources/down.png";
+//            default -> "";
+//        };
+//        return odp;
+//    }
 }
 
 

@@ -10,15 +10,15 @@ import javafx.scene.text.TextAlignment;
 
 public class Menu {
     public VBox menu;
-    public TextField mapWidthField;
-    public TextField mapHeightField;
-    public TextField mapJungleRatioField;
-    public TextField startEnergyField;
-    public TextField plantEnergyField;
-    public TextField moveEnergyField;
-    public TextField animalStartField;
-    public TextField grassStartField;
-    public TextField moveDelayField;
+    protected TextField mapWidthField;
+    protected TextField mapHeightField;
+    protected TextField mapJungleRatioField;
+    protected TextField startEnergyField;
+    protected TextField plantEnergyField;
+    protected TextField moveEnergyField;
+    protected TextField animalStartField;
+    protected TextField grassStartField;
+    protected TextField moveDelayField;
     public Button start;
 
     public Menu(){
@@ -126,5 +126,33 @@ public class Menu {
 
     public VBox getMenu() {
         return menu;
+    }
+
+    public int getAnimalStartField() {return Integer.parseInt(animalStartField.getText());}
+
+    public int getGrassStartField() {return Integer.parseInt(grassStartField.getText());}
+
+    public int getMapHeightField() {
+        return Integer.parseInt(mapHeightField.getText());
+    }
+
+    public int getMapJungleRatioField() {return Integer.parseInt(mapJungleRatioField.getText());}
+
+    public int getMapWidthField() {
+        return Integer.parseInt(mapWidthField.getText());
+    }
+
+    public int getMoveDelayField() {
+        return Integer.parseInt(moveDelayField.getText());
+    }
+
+    public int getMoveEnergyField() {
+        return Integer.parseInt(moveEnergyField.getText());
+    }
+
+    public int getPlantEnergyField() {return Integer.parseInt(plantEnergyField.getText());}
+
+    public int getStartEnergyField() {
+        return Integer.parseInt(startEnergyField.getText());
     }
 }
