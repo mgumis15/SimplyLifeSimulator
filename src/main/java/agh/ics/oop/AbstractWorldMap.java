@@ -33,6 +33,18 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
         this.startEnergy = startEnergy;
     }
 
+    public MapBoundary getMapBoundary() {
+        return mapBoundary;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
     public boolean generateGrass(int grassN) {
         while( this.grasses.size()<this.width*this.height && grassN>0){
             int yR=(int)Math.floor(Math.random()*(this.height-1));

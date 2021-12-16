@@ -15,4 +15,9 @@ public interface IWorldMap {
     Object objectAt(Vector2d currentPosition);
 
     boolean generateGrass(int grassOnStart);
+
+    MapBoundary getMapBoundary();
+
+    int getHeight();
+    int getWidth();
 }

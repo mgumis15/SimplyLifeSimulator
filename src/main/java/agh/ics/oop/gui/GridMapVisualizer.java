@@ -19,15 +19,21 @@ import java.io.FileNotFoundException;
 public class GridMapVisualizer {
     private IWorldMap map;
     private GridPane grid;
-
+    private int scaleW;
+    private int scaleH;
 
     public GridMapVisualizer(IWorldMap map, GridPane grid) {
         this.map = map;
         this.grid=grid;
-
+        this.scaleH=(int) (500/this.map.getHeight());
+        this.scaleW=(int) (500/this.map.getWidth());
     }
 
-    public void draw(Vector2d lowerLeft, Vector2d upperRight) throws FileNotFoundException {
+    public void draw() throws FileNotFoundException {
+        Vector2d lowerLeft=this.map.getMapBoundary().getLowerCorner();
+        Vector2d upperRight=this.map.getMapBoundary().getUpperCorner();
+        Vector2d jnglLowCorner=this.map.getMapBoundary().getJnglLowCorner();
+        Vector2d jnglUppCorner=this.map.getMapBoundary().getJnglUppCorner();
         this.drawHeader( lowerLeft,  upperRight);
         for (int i = upperRight.y; i >= lowerLeft.y ; i--) {
             Text headerX=new Text(String.valueOf(i));
@@ -35,13 +41,25 @@ public class GridMapVisualizer {
             this.grid.setHalignment(headerX, HPos.CENTER);
             for (int j = lowerLeft.x; j <= upperRight.x + 1; j++) {
                     if (j <= upperRight.x) {
-                        Rectangle rect=drawObject(new Vector2d(j, i));
+                        VBox rect=drawObject(new Vector2d(j, i));
 
                         if(rect!=null){
                             this.grid.add(rect,j-lowerLeft.x+ 1,upperRight.y-i+1);
                             this.grid.setHalignment(rect, HPos.CENTER);
                         }else{
-                            this.grid.add(new Text(" "),j-lowerLeft.x+ 1,upperRight.y-i+1);
+                            VBox backG = new VBox();
+                            backG.setPrefWidth(this.scaleW);
+                            backG.setPrefHeight(this.scaleH);
+                            System.out.println("("+i+","+j+")");
+                            System.out.println(jnglLowCorner.toString()+jnglUppCorner.toString());
+                            if(i>jnglLowCorner.x&&i<jnglUppCorner.x&&j>jnglLowCorner.y&&j<jnglUppCorner.y){
+
+                            backG.setStyle("-fx-background-color: #174d16;");
+                            }else{
+
+                            backG.setStyle("-fx-background-color: #fcba03;");
+                            }
+                            this.grid.add(backG,j-lowerLeft.x+ 1,upperRight.y-i+1);
                         }
                     }
             }
@@ -58,23 +76,23 @@ public class GridMapVisualizer {
         for (int j = lowerLeft.x; j < upperRight.x +1; j++) {
             Text headerX=new Text(String.valueOf(j));
             this.grid.add(headerX,j-lowerLeft.x+1,0);
-            this.grid.getColumnConstraints().add(new ColumnConstraints(25));
-            this.grid.getRowConstraints().add(new RowConstraints(25));
+            this.grid.getColumnConstraints().add(new ColumnConstraints(this.scaleW-1));
+            this.grid.getRowConstraints().add(new RowConstraints(this.scaleH-1));
             this.grid.setHalignment(headerX, HPos.CENTER);
         }
     }
 
-    private Rectangle drawObject(Vector2d currentPosition) throws FileNotFoundException {
+    private VBox drawObject(Vector2d currentPosition) throws FileNotFoundException {
         if (this.map.isOccupied(currentPosition)) {
             Object object = this.map.objectAt(currentPosition);
             if (object != null) {
-                Rectangle rect = new Rectangle();
-                rect.setWidth(25);
-                rect.setHeight(25);
+                VBox rect = new VBox();
+                rect.setPrefWidth(this.scaleW-1);
+                rect.setPrefHeight(this.scaleH-1);
                 if (object instanceof Animal) {
-                    rect.setStroke(Color.ORANGE);
+                    rect.setStyle("-fx-background-color: #fc6b03;");
                 }else{
-                    rect.setStroke(Color.DARKGREEN);
+                    rect.setStyle("-fx-background-color: #2dfc03;");
                 }
                 return rect;
             } else {

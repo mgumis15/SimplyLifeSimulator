@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -17,13 +18,15 @@ public class App extends Application  {
     protected Vector2d[] positions;
     public IEngine engineNB;
     public IEngine engineB;
-    protected GridPane grid ;
+    protected GridPane gridB;
+    protected GridPane gridNB;
+    protected GridMapVisualizer mapVisNB;
+    protected GridMapVisualizer mapVisB;
     protected GridMapVisualizer mapVisualizer;
     public void init(){
         try {
 
             System.out.println("system wystartował");
-            this.grid=new GridPane();
 //            this.positions = new Vector2d[]{new Vector2d(2, 2), new Vector2d(3, 4)};
 //            this.engine = new SimulationEngine( this.map, this.positions);
 //            this.engine.addObserver(this);
@@ -40,7 +43,11 @@ public class App extends Application  {
         System.out.println("Odpalamy grafę");
         Menu menu=new Menu();
         VBox menuBox=menu.getMenu();
-
+        this.gridNB=new GridPane();
+        this.gridB=new GridPane();
+        HBox mapBox=new HBox(this.gridNB,this.gridB);
+        mapBox.setSpacing(30);
+        Scene sceneMain=new Scene(mapBox,1100,1100);
         menu.start.setOnAction(action->{
             this.mapNB=new NoBoundariesMap(menu.getMapWidthField(),menu.getMapHeightField(),menu.getMapJungleRatioField());
             this.mapB=new BoundaryMap(menu.getMapWidthField(),menu.getMapHeightField(),menu.getMapJungleRatioField());
@@ -57,6 +64,19 @@ public class App extends Application  {
             Thread engineThreadB = new Thread((Runnable) this.engineB);
             engineThreadNB.start();
             engineThreadB.start();
+            this.mapVisB=new GridMapVisualizer(this.mapB,this.gridB);
+            this.mapVisNB=new GridMapVisualizer(this.mapNB,this.gridNB);
+            try{
+
+                this.mapVisB.draw();
+                this.mapVisNB.draw();
+            }catch (FileNotFoundException ex){
+                System.out.println(ex.toString());
+            }
+
+            primaryStage.setScene(sceneMain);
+            primaryStage.show();
+
         });
 
 
@@ -66,17 +86,12 @@ public class App extends Application  {
 
 //
 //        this.mapVisualizer=new GridMapVisualizer(this.map,this.grid);
-//        try{
-//
-//        this.mapVisualizer.draw(this.map.mapBoundary.getLowerCorner(),this.map.mapBoundary.getUpperCorner());
-//        }catch (FileNotFoundException ex){
-//            System.out.println(ex.toString());
-//        }
 
 
 
-        Scene scene = new Scene(menuBox, 600, 600);
-        primaryStage.setScene(scene);
+        Scene sceneMenu = new Scene(menuBox, 600, 600);
+
+        primaryStage.setScene(sceneMenu);
         primaryStage.show();
 
     }

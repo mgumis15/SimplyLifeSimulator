@@ -16,13 +16,13 @@ public class SimulationEngine implements IEngine,Runnable{
 
         this.map=map;
        this.map.generateGrass(grassOnStart);
-        for (int i = 0; i < animalsOnStart; i++) {
-
-            Animal newAnimal=new Animal(this.map);
-
-            this.map.place(newAnimal);
-            this.animals.add(newAnimal);
-        }
+//        for (int i = 0; i < animalsOnStart; i++) {
+//
+//            Animal newAnimal=new Animal(this.map);
+//
+//            this.map.place(newAnimal);
+//            this.animals.add(newAnimal);
+//        }
     }
     public void addObserver(App observer){
         System.out.println("DODANED");
@@ -35,17 +35,17 @@ public class SimulationEngine implements IEngine,Runnable{
 
     @Override
     public void run() {
-        for (Animal animal:animals){
-            try{
-                Thread.sleep(this.moveDelay);
-            } catch (InterruptedException e) {
-                System.out.println("Błąd w usypianiu");
-            }
-            animal.move();
-            for (App app:this.observers){
-                app.positionChanged();
-            }
-        }
+//        for (Animal animal:animals){
+//            try{
+//                Thread.sleep(this.moveDelay);
+//            } catch (InterruptedException e) {
+//                System.out.println("Błąd w usypianiu");
+//            }
+//            animal.move();
+//            for (App app:this.observers){
+//                app.positionChanged();
+//            }
+//        }
     }
 
 

@@ -27,21 +27,21 @@ public class Menu {
 
         Text mapWidthLabel = new Text("Width: ");
         this.mapWidthField=new TextField();
-        this.mapWidthField.setText("100");
+        this.mapWidthField.setText("10");
         HBox mapWidthBox=new HBox(mapWidthLabel,this.mapWidthField);
         mapWidthBox.setSpacing(7);
         mapWidthBox.setAlignment(Pos.CENTER);
 
         Text mapHeightLabel = new Text("Height: ");
         this.mapHeightField=new TextField();
-        this.mapHeightField.setText("100");
+        this.mapHeightField.setText("10");
         HBox mapHeightBox=new HBox(mapHeightLabel,this.mapHeightField);
         mapHeightBox.setSpacing(7);
         mapHeightBox.setAlignment(Pos.CENTER);
 
         Text mapJungleRatioLabel = new Text("Jungle ratio (1-100): ");
         this.mapJungleRatioField=new TextField();
-        this.mapJungleRatioField.setText("7");
+        this.mapJungleRatioField.setText("10");
         HBox mapJungleRatioBox=new HBox(mapJungleRatioLabel,this.mapJungleRatioField);
         mapJungleRatioBox.setSpacing(7);
         mapJungleRatioBox.setAlignment(Pos.CENTER);
@@ -83,7 +83,7 @@ public class Menu {
 
         Text animalStartLabel = new Text("Animals at start: ");
         this.animalStartField=new TextField();
-        this.animalStartField.setText("7");
+        this.animalStartField.setText("5");
         HBox animalStartBox=new HBox(animalStartLabel,this.animalStartField);
         animalStartBox.setSpacing(7);
         animalStartBox.setAlignment(Pos.CENTER);
@@ -104,7 +104,7 @@ public class Menu {
 
         Text moveDelayLabel = new Text("Delay (ms): ");
         this.moveDelayField=new TextField();
-        this.moveDelayField.setText("200");
+        this.moveDelayField.setText("300");
         HBox moveDelayBox=new HBox(moveDelayLabel,this.moveDelayField);
         moveDelayBox.setSpacing(7);
         moveDelayBox.setAlignment(Pos.CENTER);
@@ -114,9 +114,7 @@ public class Menu {
         moveDelayStatsBox.setAlignment(Pos.CENTER);
 
         this.start=new Button("Start");
-        this.start.setOnAction(event->{
-            System.out.println("STARTUJEMY");
-        });
+
 
 
         this.menu=new VBox(mapStatsBox,energyStatsBox,spawnStatsBox,moveDelayStatsBox,this.start);
