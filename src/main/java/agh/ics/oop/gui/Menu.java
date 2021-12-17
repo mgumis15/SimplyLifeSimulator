@@ -12,7 +12,8 @@ public class Menu {
     public VBox menu;
     protected TextField mapWidthField;
     protected TextField mapHeightField;
-    protected TextField mapJungleRatioField;
+    protected TextField mapJungleWidthField;
+    protected TextField mapJungleHeightField;
     protected TextField startEnergyField;
     protected TextField plantEnergyField;
     protected TextField moveEnergyField;
@@ -39,14 +40,23 @@ public class Menu {
         mapHeightBox.setSpacing(7);
         mapHeightBox.setAlignment(Pos.CENTER);
 
-        Text mapJungleRatioLabel = new Text("Jungle ratio (1-100): ");
-        this.mapJungleRatioField=new TextField();
-        this.mapJungleRatioField.setText("10");
-        HBox mapJungleRatioBox=new HBox(mapJungleRatioLabel,this.mapJungleRatioField);
-        mapJungleRatioBox.setSpacing(7);
-        mapJungleRatioBox.setAlignment(Pos.CENTER);
 
-        VBox mapStatsBox=new VBox(mapTitle,mapWidthBox,mapHeightBox,mapJungleRatioBox);
+
+        Text mapJungleWidthLabel = new Text("Jungle width: ");
+        this.mapJungleWidthField=new TextField();
+        this.mapJungleWidthField.setText("3");
+        HBox mapJungleWidthBox=new HBox(mapJungleWidthLabel,this.mapJungleWidthField);
+        mapJungleWidthBox.setSpacing(7);
+        mapJungleWidthBox.setAlignment(Pos.CENTER);
+
+        Text mapJungleHeightLabel = new Text("Jungle height: ");
+        this.mapJungleHeightField=new TextField();
+        this.mapJungleHeightField.setText("3");
+        HBox mapJungleHeightBox=new HBox(mapJungleHeightLabel,this.mapJungleHeightField);
+        mapJungleHeightBox.setSpacing(7);
+        mapJungleHeightBox.setAlignment(Pos.CENTER);
+
+        VBox mapStatsBox=new VBox(mapTitle,mapWidthBox,mapHeightBox,mapJungleWidthBox,mapJungleHeightBox);
         mapStatsBox.setSpacing(15);
         mapStatsBox.setAlignment(Pos.CENTER);
 
@@ -134,7 +144,9 @@ public class Menu {
         return Integer.parseInt(mapHeightField.getText());
     }
 
-    public int getMapJungleRatioField() {return Integer.parseInt(mapJungleRatioField.getText());}
+    public int getMapJungleHeightField() {return Integer.parseInt(mapJungleHeightField.getText());}
+
+    public int getMapJungleWidthField() {return Integer.parseInt(mapJungleWidthField.getText());}
 
     public int getMapWidthField() {
         return Integer.parseInt(mapWidthField.getText());

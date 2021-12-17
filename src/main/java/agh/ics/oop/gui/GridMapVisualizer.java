@@ -50,8 +50,8 @@ public class GridMapVisualizer {
                             VBox backG = new VBox();
                             backG.setPrefWidth(this.scaleW);
                             backG.setPrefHeight(this.scaleH);
-                            System.out.println("("+i+","+j+")");
-                            System.out.println(jnglLowCorner.toString()+jnglUppCorner.toString());
+//                            System.out.println("("+i+","+j+")");
+//                            System.out.println(jnglLowCorner.toString()+jnglUppCorner.toString());
                             if(i>jnglLowCorner.x&&i<jnglUppCorner.x&&j>jnglLowCorner.y&&j<jnglUppCorner.y){
 
                             backG.setStyle("-fx-background-color: #174d16;");

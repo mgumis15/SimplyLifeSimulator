@@ -8,14 +8,12 @@ import java.util.*;
 public class MapBoundary {
     public Vector2d lowerCorner,upperCorner,jnglLowCorner,jnglUppCorner;
 
-    public MapBoundary(int width,int height,int jungleRatio){
-        int jnglWidth=(int) Math.floor(width*(jungleRatio/100));
-        int jnglHeight=(int) Math.floor(height*(jungleRatio/100));
+    public MapBoundary(int width,int height,int jungleWidth,int jungleHeight){
 
         this.lowerCorner=new Vector2d(0,0);
         this.upperCorner=new Vector2d(width-1,height-1);
-        this.jnglLowCorner=new Vector2d((int) Math.floor((width-jnglWidth)/2),(int) Math.floor((height-jnglHeight)/2));
-        this.jnglUppCorner=new Vector2d((int) Math.floor((width-jnglWidth)/2)+jnglWidth,(int) Math.floor((height-jnglHeight)/2)+jnglHeight);
+        this.jnglLowCorner=new Vector2d((int) Math.floor((width-jungleWidth)/2),(int) Math.floor((height-jungleHeight)/2));
+        this.jnglUppCorner=new Vector2d((int) Math.floor((width-jungleWidth)/2)+jungleWidth,(int) Math.floor((height-jungleHeight)/2)+jungleHeight);
 
     }
 

@@ -49,8 +49,8 @@ public class App extends Application  {
         mapBox.setSpacing(30);
         Scene sceneMain=new Scene(mapBox,1100,1100);
         menu.start.setOnAction(action->{
-            this.mapNB=new NoBoundariesMap(menu.getMapWidthField(),menu.getMapHeightField(),menu.getMapJungleRatioField());
-            this.mapB=new BoundaryMap(menu.getMapWidthField(),menu.getMapHeightField(),menu.getMapJungleRatioField());
+            this.mapNB=new NoBoundariesMap(menu.getMapWidthField(),menu.getMapHeightField(),menu.getMapJungleWidthField(),menu.getMapJungleHeightField());
+            this.mapB=new BoundaryMap(menu.getMapWidthField(),menu.getMapHeightField(),menu.getMapJungleWidthField(),menu.getMapJungleHeightField());
             this.mapNB.setPlantEnergy(menu.getPlantEnergyField());
             this.mapB.setPlantEnergy(menu.getPlantEnergyField());
             this.mapNB.setMoveEnergy(menu.getMoveEnergyField());
