@@ -12,9 +12,8 @@ public class MapBoundary {
 
         this.lowerCorner=new Vector2d(0,0);
         this.upperCorner=new Vector2d(width-1,height-1);
-        this.jnglLowCorner=new Vector2d((int) Math.floor((width-jungleWidth)/2),(int) Math.floor((height-jungleHeight)/2));
+        this.jnglLowCorner=new Vector2d((int) Math.floor((width-jungleWidth)/2)-1,(int) Math.floor((height-jungleHeight)/2)-1);
         this.jnglUppCorner=new Vector2d((int) Math.floor((width-jungleWidth)/2)+jungleWidth,(int) Math.floor((height-jungleHeight)/2)+jungleHeight);
-
     }
 
 

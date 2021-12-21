@@ -44,14 +44,14 @@ public class Menu {
 
         Text mapJungleWidthLabel = new Text("Jungle width: ");
         this.mapJungleWidthField=new TextField();
-        this.mapJungleWidthField.setText("3");
+        this.mapJungleWidthField.setText("4");
         HBox mapJungleWidthBox=new HBox(mapJungleWidthLabel,this.mapJungleWidthField);
         mapJungleWidthBox.setSpacing(7);
         mapJungleWidthBox.setAlignment(Pos.CENTER);
 
         Text mapJungleHeightLabel = new Text("Jungle height: ");
         this.mapJungleHeightField=new TextField();
-        this.mapJungleHeightField.setText("3");
+        this.mapJungleHeightField.setText("4");
         HBox mapJungleHeightBox=new HBox(mapJungleHeightLabel,this.mapJungleHeightField);
         mapJungleHeightBox.setSpacing(7);
         mapJungleHeightBox.setAlignment(Pos.CENTER);
@@ -93,14 +93,14 @@ public class Menu {
 
         Text animalStartLabel = new Text("Animals at start: ");
         this.animalStartField=new TextField();
-        this.animalStartField.setText("5");
+        this.animalStartField.setText("10");
         HBox animalStartBox=new HBox(animalStartLabel,this.animalStartField);
         animalStartBox.setSpacing(7);
         animalStartBox.setAlignment(Pos.CENTER);
 
         Text grassStartLabel = new Text("Grasses at start: ");
         this.grassStartField=new TextField();
-        this.grassStartField.setText("15");
+        this.grassStartField.setText("10");
         HBox grassStartBox=new HBox(grassStartLabel,this.grassStartField);
         grassStartBox.setSpacing(7);
         grassStartBox.setAlignment(Pos.CENTER);
@@ -114,7 +114,7 @@ public class Menu {
 
         Text moveDelayLabel = new Text("Delay (ms): ");
         this.moveDelayField=new TextField();
-        this.moveDelayField.setText("300");
+        this.moveDelayField.setText("500");
         HBox moveDelayBox=new HBox(moveDelayLabel,this.moveDelayField);
         moveDelayBox.setSpacing(7);
         moveDelayBox.setAlignment(Pos.CENTER);

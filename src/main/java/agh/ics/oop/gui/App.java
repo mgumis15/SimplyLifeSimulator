@@ -4,36 +4,34 @@ import agh.ics.oop.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
+import java.beans.EventHandler;
 import java.io.FileNotFoundException;
 
 public class App extends Application  {
 
-    protected NoBoundariesMap mapNB;
     protected  BoundaryMap mapB ;
-    protected Vector2d[] positions;
-    public IEngine engineNB;
+    protected NoBoundariesMap mapNB;
     public IEngine engineB;
+    public IEngine engineNB;
     protected GridPane gridB;
     protected GridPane gridNB;
-    protected GridMapVisualizer mapVisNB;
     protected GridMapVisualizer mapVisB;
-    protected GridMapVisualizer mapVisualizer;
+    protected GridMapVisualizer mapVisNB;
+    protected Thread engineThreadB;
+    protected Thread engineThreadNB;
+
     public void init(){
         try {
 
             System.out.println("system wystartował");
-//            this.positions = new Vector2d[]{new Vector2d(2, 2), new Vector2d(3, 4)};
-//            this.engine = new SimulationEngine( this.map, this.positions);
-//            this.engine.addObserver(this);
-//            this.engine.setDelay(1000);
-
-//            System.out.println(map.toString());
-            System.out.println("system zakończył działanie");
         }catch(IllegalArgumentException ex){
             System.out.println(ex.toString());
         }
@@ -45,7 +43,33 @@ public class App extends Application  {
         VBox menuBox=menu.getMenu();
         this.gridNB=new GridPane();
         this.gridB=new GridPane();
-        HBox mapBox=new HBox(this.gridNB,this.gridB);
+        this.gridB.setMaxWidth(500);
+        this.gridNB.setMaxWidth(500);
+        Button stopB=new Button("Pause");
+        stopB.setOnAction(action ->{
+            if(this.engineB.getRunState()){
+                this.engineB.stop();
+                stopB.setText("Continue");
+            }else{
+                this.engineB.conitnueRun();
+                stopB.setText("Stop");
+            }
+        });
+        Button stopNB=new Button("Pause");
+        stopNB.setOnAction(action ->{
+            if(this.engineNB.getRunState()){
+                this.engineNB.stop();
+                stopNB.setText("Continue");
+            }else{
+                this.engineNB.conitnueRun();
+                stopNB.setText("Stop");
+            }
+        });
+        Label gridBLabel=new Label("With boundaries map");
+        Label gridNBLabel=new Label("Without boundaries map");
+        VBox gridBBox=new VBox(gridBLabel,stopB,this.gridB);
+        VBox gridNBBox=new VBox(gridNBLabel,stopNB,this.gridNB);
+        HBox mapBox=new HBox(gridBBox,gridNBBox);
         mapBox.setSpacing(30);
         Scene sceneMain=new Scene(mapBox,1100,1100);
         menu.start.setOnAction(action->{
@@ -59,13 +83,15 @@ public class App extends Application  {
             this.mapB.setStartEnergy(menu.getStartEnergyField());
             this.engineNB=new SimulationEngine( this.mapNB,menu.getMoveDelayField(),menu.getAnimalStartField(),menu.getGrassStartField());
             this.engineB=new SimulationEngine( this.mapB,menu.getMoveDelayField(),menu.getAnimalStartField(),menu.getGrassStartField());
-
-            Thread engineThreadNB = new Thread((Runnable) this.engineNB);
-            Thread engineThreadB = new Thread((Runnable) this.engineB);
-            engineThreadNB.start();
-            engineThreadB.start();
             this.mapVisB=new GridMapVisualizer(this.mapB,this.gridB);
             this.mapVisNB=new GridMapVisualizer(this.mapNB,this.gridNB);
+            this.engineNB.addObserver(this);
+            this.engineB.addObserver(this);
+            this.engineThreadNB = new Thread((Runnable) this.engineNB);
+            this.engineThreadB = new Thread((Runnable) this.engineB);
+//            this.engineThreadNB.start();
+            this.engineThreadB.start();
+
             try{
 
                 this.mapVisB.draw();
@@ -76,6 +102,12 @@ public class App extends Application  {
 
             primaryStage.setScene(sceneMain);
             primaryStage.show();
+            primaryStage.setOnCloseRequest(event -> {
+                this.engineNB.endRun();
+                this.engineB.endRun();
+                Platform.exit();
+                System.out.println("system zakończył działanie");
+            });
 
         });
 
@@ -95,17 +127,17 @@ public class App extends Application  {
         primaryStage.show();
 
     }
+    public void newDay(){
+        Platform.runLater(() -> {
+                try{
+                    this.mapVisB.draw();
+                    this.mapVisNB.draw();
 
-        public void positionChanged() {
-//            Platform.runLater(() -> {
-//                this.grid.getChildren().clear();
-//                try{
-//                    this.mapVisualizer.draw(this.map.mapBoundary.getLowerCorner(),this.map.mapBoundary.getUpperCorner());
-//                    this.grid.setGridLinesVisible(true);
-//                } catch (FileNotFoundException e) {
-//                    System.out.println("Błąd rysowania");
-//                }
-//            });
+                } catch (FileNotFoundException e) {
+                    System.out.println("Błąd rysowania");
+                }
+            });
 
     }
+
 }

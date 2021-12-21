@@ -30,6 +30,7 @@ public class GridMapVisualizer {
     }
 
     public void draw() throws FileNotFoundException {
+        this.clear();
         Vector2d lowerLeft=this.map.getMapBoundary().getLowerCorner();
         Vector2d upperRight=this.map.getMapBoundary().getUpperCorner();
         Vector2d jnglLowCorner=this.map.getMapBoundary().getJnglLowCorner();
@@ -50,8 +51,6 @@ public class GridMapVisualizer {
                             VBox backG = new VBox();
                             backG.setPrefWidth(this.scaleW);
                             backG.setPrefHeight(this.scaleH);
-//                            System.out.println("("+i+","+j+")");
-//                            System.out.println(jnglLowCorner.toString()+jnglUppCorner.toString());
                             if(i>jnglLowCorner.x&&i<jnglUppCorner.x&&j>jnglLowCorner.y&&j<jnglUppCorner.y){
 
                             backG.setStyle("-fx-background-color: #174d16;");
@@ -66,7 +65,17 @@ public class GridMapVisualizer {
 
         }
     }
+    public void clear(){
+        this.grid.getChildren().clear();
 
+        while(this.grid.getRowConstraints().size() > 0){
+            this.grid.getRowConstraints().remove(0);
+        }
+
+        while(this.grid.getColumnConstraints().size() > 0){
+            this.grid.getColumnConstraints().remove(0);
+        }
+    }
     private void drawHeader(Vector2d lowerLeft, Vector2d upperRight) {
         Text header=new Text(" y\\x ");
         this.grid.getColumnConstraints().add(new ColumnConstraints(25));
