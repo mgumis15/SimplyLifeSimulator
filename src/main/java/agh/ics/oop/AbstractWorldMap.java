@@ -1,17 +1,10 @@
 package agh.ics.oop;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
+
+abstract class AbstractWorldMap implements IWorldMap {
     protected LinkedHashMap<Vector2d, ArrayList<Animal>> animalsOnPosition = new LinkedHashMap<>();
-//    protected LinkedHashMap<Vector2d, SortedSet<Animal>> animalsOnPosition = new LinkedHashMap<>();
-//    SortedSet<Animal> newCell=new TreeSet<Animal>(new Comparator<Animal>() {
-//        @Override
-//        public int compare(Animal o1, Animal o2) {
-//            return Integer.compare(o1.energy, o2.energy);
-//        }
-//    });
 
     public ArrayList<Animal> animals=new ArrayList<Animal>();
     protected LinkedHashMap<Vector2d, Grass> grasses = new LinkedHashMap<>();
@@ -22,32 +15,52 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
     protected int plantEnergy;
     protected int moveEnergy;
     protected int startEnergy;
+    protected int energySum;
+    protected int deadAnimalsQuant;
+    protected int deadAnimalsSumLifeSpan;
+    protected Animal chosenAnimal;
     public MapBoundary mapBoundary;
+    protected int days=0;
+    protected int magic=-1;
+    protected int allChilds=0;
 
-    public AbstractWorldMap(int width,int height,int jungleWidth,int jungleHeight){
+
+    public AbstractWorldMap(int width,int height,int jungleWidth,int jungleHeight,boolean magic){
         this.width=width;
         this.height=height;
         this.jungleWidth=jungleWidth;
         this.jungleHeight=jungleHeight;
         this.mapBoundary=new MapBoundary(this.width,this.height,this.jungleWidth,this.jungleHeight);
-
+        this.chosenAnimal=null;
+        if(magic)this.magic=3;
     }
 
 
 
-    public void newDayRise(){
-    System.out.println("New day ---------");
+    public boolean newDayRise(){
+    this.days+=1;
     this.removeDeadAnimals();
+    if(this.animals.size() <= 5 && this.magic>0){
+        this.magicGenerationAnimals();
+        this.magic--;
+    }
     this.moveAllAnimals();
     this.animalsEatGrass();
+    this.animalsReproducton();
     this.generateDailyGrasses();
+        return this.animals.size() <= 0;
     }
 
     public void removeDeadAnimals(){
         Iterator<Animal> i = this.animals.iterator();
         while(i.hasNext()) {
+
             Animal animal=i.next();
             if(animal.getEnergy()<this.moveEnergy){
+                this.allChilds-=(int) Math.floor(animal.childs/2);
+                animal.setDeathDay(this.days);
+                this.deadAnimalsSumLifeSpan+=animal.lifeSpan;
+                this.deadAnimalsQuant+=1;
                 this.animalsOnPosition.get(animal.position).remove(animal);
                 if(this.animalsOnPosition.get(animal.position).size()==0){
                     this.animalsOnPosition.remove(animal.position);
@@ -56,25 +69,119 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
             }
         }
     }
+
     public void animalsEatGrass(){
         Set<Vector2d> keys=this.animalsOnPosition.keySet();
         for (Vector2d key : keys) {
             this.animalsOnPosition.get(key).sort((o1, o2) -> Integer.compare(o2.energy, o1.energy));
             if(this.grasses.containsKey(key)){
-                int count=1;
+                int countIdentical=1;
                 for (int i = 1; i < this.animalsOnPosition.get(key).size(); i++) {
-                    if(this.animalsOnPosition.get(key).get(i-1).energy==this.animalsOnPosition.get(key).get(i).energy)count++;
+                    if(this.animalsOnPosition.get(key).get(i-1).energy==this.animalsOnPosition.get(key).get(i).energy)countIdentical++;
                     else break;
                 }
-                for (int i = 0; i < count; i++) {
-                    this.animalsOnPosition.get(key).get(i).energy+=Math.floor(this.plantEnergy/count);
+                for (int i = 0; i < countIdentical; i++) {
+                    this.animalsOnPosition.get(key).get(i).energy+=(int) Math.floor((double)this.plantEnergy/countIdentical);
                 }
                 this.grasses.remove(key);
             }
         }
     }
+    public void animalsReproducton(){
+        Set<Vector2d> keys=this.animalsOnPosition.keySet();
+        for (Vector2d key : keys) {
+
+            if(this.animalsOnPosition.get(key).size()>=2){
+                this.animalsOnPosition.get(key).sort((o1, o2) -> Integer.compare(o2.energy, o1.energy));
+                if(this.animalsOnPosition.get(key).get(0).energy<this.startEnergy/2)return;
+
+                int countIdenFirst=1;
+                for (int i = 1; i < this.animalsOnPosition.get(key).size(); i++) {
+                    if(this.animalsOnPosition.get(key).get(i-1).energy==this.animalsOnPosition.get(key).get(i).energy)countIdenFirst++;
+                    else break;
+                }
+
+                if(countIdenFirst==1){
+                    if(this.animalsOnPosition.get(key).get(1).energy<this.startEnergy/2)return;
+                    int countIdenSecond=1;
+                    for (int i = 2; i < this.animalsOnPosition.get(key).size(); i++) {
+                        if(this.animalsOnPosition.get(key).get(i-1).energy==this.animalsOnPosition.get(key).get(i).energy)countIdenSecond++;
+                        else break;
+                    }
+                    if(countIdenSecond==1){
+                        this.bornAnimal(this.animalsOnPosition.get(key).get(0),this.animalsOnPosition.get(key).get(1));
+                    }else{
+                        int index2=new Random().nextInt(countIdenSecond)+1;
+                        this.bornAnimal(this.animalsOnPosition.get(key).get(0),this.animalsOnPosition.get(key).get(index2));
+                    }
+                }else{
+                    int index1=new Random().nextInt(countIdenFirst);
+                    int index2=new Random().nextInt(countIdenFirst);
+                    while(index2==index1){
+                        index2=new Random().nextInt(countIdenFirst);
+                    }
+                    this.bornAnimal(this.animalsOnPosition.get(key).get(index1),this.animalsOnPosition.get(key).get(index2));
+                }
+            }
+        }
+    }
 
 
+    public void bornAnimal(Animal parent1,Animal parent2){
+            this.allChilds+=1;
+            parent1.childs+=1;
+            parent2.childs+=1;
+            int sumEnergy=parent1.energy+parent2.energy;
+            boolean side=new Random().nextBoolean();
+            boolean firstStronger;
+            double percentage;
+            if(parent1.energy>parent2.energy){
+                percentage=(double)parent1.energy/(sumEnergy);
+                firstStronger=true;
+            }
+            else {
+                percentage=(double )parent2.energy/(sumEnergy);
+                firstStronger=false;
+            }
+            int slicePoint=(int) Math.ceil(percentage*32)-1;
+            Vector2d pos=new Vector2d(parent1.position.x,parent1.position.y);
+            Animal child=new Animal(this,pos,(int) Math.floor(parent1.energy/4)+ (int) Math.floor(parent2.energy/4));
+            parent1.energy-=(int) Math.floor(parent1.energy/4);
+            parent2.energy-=(int) Math.floor(parent2.energy/4);
+        this.placeAnimal(child);
+        for (int i = 0; i < 32; i++) {
+            if(side){
+              if(i<=slicePoint){
+                  if (firstStronger){
+                      child.genes.set(i,parent1.genes.get(i));
+                  }else{
+                      child.genes.set(i,parent2.genes.get(i));
+                  }
+              }else{
+                  if (firstStronger){
+                      child.genes.set(i,parent2.genes.get(i));
+                  }else{
+                      child.genes.set(i,parent1.genes.get(i));
+                  }
+              }
+            }else{
+                if(i>=32-slicePoint){
+                    if (firstStronger){
+                        child.genes.set(i,parent1.genes.get(i));
+                    }else{
+                        child.genes.set(i,parent2.genes.get(i));
+                    }
+                }else{
+                    if (firstStronger){
+                        child.genes.set(i,parent2.genes.get(i));
+                    }else{
+                        child.genes.set(i,parent1.genes.get(i));
+                    }
+                }
+            }
+        }
+        Collections.sort(child.genes);
+    }
 
 
     public boolean generateStartGrasses(int grassN) {
@@ -113,15 +220,50 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
         }
         return true;
     }
+    public void magicGenerationAnimals(){
+        int toGenerate=5;
+        int alive=this.animals.size();
+        if(alive>0){
+            while(toGenerate>0){
+                int yR=(int)Math.floor(Math.random()*(this.height));
+                int xR=(int)Math.floor(Math.random()*(this.width));
+                Vector2d newAnimalPosition=new Vector2d(xR,yR);
+                if (!this.isOccupied(newAnimalPosition)){
+                    Animal animal=new Animal(this,newAnimalPosition,this.startEnergy);
+                    int randomAlive=new Random().nextInt(alive);
+                    for (int i = 0; i < 32; i++) {
+                        animal.genes.set(i,this.animals.get(randomAlive).genes.get(i));
+                    }
+                    this.placeAnimal(animal);
+                    toGenerate--;
+                }
+            }
+        }else{
+            while(toGenerate>0){
+                int yR=(int)Math.floor(Math.random()*(this.height));
+                int xR=(int)Math.floor(Math.random()*(this.width));
+                Vector2d newAnimalPosition=new Vector2d(xR,yR);
+                if (!this.isOccupied(newAnimalPosition)){
+                    Animal animal=new Animal(this,newAnimalPosition,this.startEnergy);
+                    this.placeAnimal(animal);
+                    toGenerate--;
+                }
+            }
+        }
+    }
 
     public void placeGrass(Grass grass) {
         this.grasses.put(grass.position,grass);
     }
 
     public void placeAnimal(Animal animal) {
-        ArrayList<Animal> newCell=new ArrayList<Animal>();
-        newCell.add(animal);
-        this.animalsOnPosition.put(animal.position,newCell);
+        if(this.animalsOnPosition.containsKey(animal.position)){
+                this.animalsOnPosition.get(animal.position).add(animal);
+        }else{
+            ArrayList<Animal> newCell=new ArrayList<Animal>();
+            newCell.add(animal);
+            this.animalsOnPosition.put(animal.position,newCell);
+        }
         this.animals.add(animal);
     }
 
@@ -132,7 +274,9 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
         return false;
     }
     public void moveAllAnimals(){
+        this.energySum=0;
         for (Animal animal:this.animals) {
+
             animal.energy-=this.moveEnergy;
             Vector2d oldPosition=animal.position;
             if(animal.move()){
@@ -149,6 +293,7 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
                     this.animalsOnPosition.put(animal.position,newCell);
                 }
             }
+            this.energySum+=animal.energy;
         }
     }
 
@@ -198,61 +343,21 @@ abstract class AbstractWorldMap implements IWorldMap,IPositionChangeObserver {
 
 
 
-//    public boolean generateAnimals(int animalsN) {
-//        while( this.animals.size()<this.width*this.height && animalsN>0){
-//            int yR=(int)Math.floor(Math.random()*(this.height-1));
-//            int xR=(int)Math.floor(Math.random()*(this.width-1));
-//            Vector2d newAnimalPosition=new Vector2d(xR,yR);
-//            Animal animal=new Animal(this,newAnimalPosition,this.startEnergy);
-//            if (this.place(animal)){
-//                animalsN--;
-//            }
-//        }
-//        if(this.animals.size()==this.width*this.height && animalsN>0){
-//            return false;
-//        }
-//        return true;
-//    }
-
-//    public boolean place(Animal animal){
-//            if(this.isOccupied(animal.position)){
-//                return false;
-//            }
-//            this.animalsOnPosition.get(animal.position).add(animal);
-//            return true;
-//    }
-//
-
-//    public boolean isOccupied(Vector2d position) {
-//        if(this.animalsOnPosition.containsKey(position))return true;
-//        if(this.grasses.containsKey(position))return true;
-//        return false;
-//    }
-
-public Object objectAt(Vector2d position) {
-    if(this.animalsOnPosition.containsKey(position)){
-        if (this.animalsOnPosition.get(position).size()>0){
-        return this.animalsOnPosition.get(position).get(0);
+    public Object objectAt(Vector2d position) {
+        if(this.animalsOnPosition.containsKey(position)){
+            if (this.animalsOnPosition.get(position).size()>0){
+            return this.animalsOnPosition.get(position).get(0);
+            }
         }
+        if(this.grasses.containsKey(position))return this.grasses.get(position);
+        return null;
     }
-    if(this.grasses.containsKey(position))return this.grasses.get(position);
-    return null;
-}
 
 public ArrayList<Animal> animalsAt(Vector2d position) {
     return animalsOnPosition.get(position);
 }
 
 
-
-
-
-
-    public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
-//            Animal curr=animalsOnPosition.get(oldPosition);
-//            animalsOnPosition.get(newPosition);
-//            animalsOnPosition.remove(oldPosition);
-    }
 
 
     public void setPlantEnergy(int grassEnergy) {
@@ -277,4 +382,62 @@ public ArrayList<Animal> animalsAt(Vector2d position) {
         return width;
     }
 
+    public int getStartEnergy() {
+        return startEnergy;
+    }
+
+    public Integer getDays() {
+        return days;
+    }
+
+    public Integer getAnimalsQuant() {
+        return this.animals.size();
+    }
+    public Integer getGrassQuant() {
+        return this.grasses.size();
+    }
+    public Integer getAnimalsLifespanMean() {
+        if(this.deadAnimalsQuant>0){
+        return this.deadAnimalsSumLifeSpan/this.deadAnimalsQuant;
+        }
+        return 0;
+    }
+    public Integer getEnergyMean() {
+        if(this.animals.size()>0) return this.energySum/this.animals.size();
+        else return 0;
+    }
+    public void choseAnimal(Animal animal){
+        this.chosenAnimal=animal;
+    };
+    public Animal getChosenAnimal() {
+        return chosenAnimal;
+    }
+
+    public int getMagic() {
+        return magic;
+    }
+    public ArrayList<Integer> getGensDominant(){
+        int maxC=0;
+        int count;
+        ArrayList<Integer> bestGenes=new ArrayList<Integer>();
+            for (int i = 0; i <this.animals.size() ; i++) {
+               count=1;
+                for (int j = i+1; j <this.animals.size() ; j++) {
+                        if(this.animals.get(i).genes.equals(this.animals.get(j).genes)){
+                            count+=1;
+                        }
+                }
+                if (count>maxC){
+                    bestGenes=this.animals.get(i).genes;
+                }
+            }
+        return bestGenes;
+    }
+    public Double getAverageChilds(){
+        if(this.animals.size()>0){
+            return (double) this.allChilds/this.animals.size();
+        }else{
+            return 0.0;
+        }
+    }
 }

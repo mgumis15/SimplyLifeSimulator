@@ -54,7 +54,9 @@ public class SimulationEngine implements IEngine,Runnable{
 
                 try{
                     if(this.runState){
-                   this.map.newDayRise();
+                   if(this.map.newDayRise()){
+                    this.killThread.set(true);
+                   }
                     }
                     Thread.sleep(this.moveDelay);
                 } catch (InterruptedException e) {

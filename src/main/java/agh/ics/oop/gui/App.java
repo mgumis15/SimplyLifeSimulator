@@ -27,7 +27,8 @@ public class App extends Application  {
     protected GridMapVisualizer mapVisNB;
     protected Thread engineThreadB;
     protected Thread engineThreadNB;
-
+    protected DataVisualizer dataVisualizerB=new DataVisualizer();
+    protected DataVisualizer dataVisualizerNB=new DataVisualizer();
     public void init(){
         try {
 
@@ -38,6 +39,7 @@ public class App extends Application  {
     }
     @Override
     public void start(Stage primaryStage){
+
         System.out.println("Odpalamy grafę");
         Menu menu=new Menu();
         VBox menuBox=menu.getMenu();
@@ -65,16 +67,45 @@ public class App extends Application  {
                 stopNB.setText("Stop");
             }
         });
+        Button showDomGenButtonB=new Button("Animals dom. gens");
+        showDomGenButtonB.setOnAction(action ->{
+            if(!this.engineB.getRunState()){
+                try{
+                    this.mapVisB.draw(true);
+                } catch (FileNotFoundException e) {
+                    System.out.println("Błąd rysowania");
+                }
+            }
+        });
+        Button showDomGenButtonNB=new Button("Animals dom. gens");
+        showDomGenButtonNB.setOnAction(action ->{
+            if(!this.engineNB.getRunState()){
+                try{
+                    this.mapVisNB.draw(true);
+                } catch (FileNotFoundException e) {
+                    System.out.println("Błąd rysowania");
+                };
+            }
+        });
+        HBox buttonsB=new HBox(stopB,showDomGenButtonB);
+        buttonsB.setSpacing(10);
+        HBox buttonsNB=new HBox(stopNB,showDomGenButtonNB);
+        buttonsNB.setSpacing(10);
         Label gridBLabel=new Label("With boundaries map");
         Label gridNBLabel=new Label("Without boundaries map");
-        VBox gridBBox=new VBox(gridBLabel,stopB,this.gridB);
-        VBox gridNBBox=new VBox(gridNBLabel,stopNB,this.gridNB);
+
+
+
+        VBox gridBBox=new VBox(gridBLabel,buttonsB,this.gridB,this.dataVisualizerB.getDataBox());
+        VBox gridNBBox=new VBox(gridNBLabel,buttonsNB,this.gridNB,this.dataVisualizerNB.getDataBox());
+        gridBBox.setSpacing(15);
+        gridNBBox.setSpacing(15);
         HBox mapBox=new HBox(gridBBox,gridNBBox);
         mapBox.setSpacing(30);
         Scene sceneMain=new Scene(mapBox,1100,1100);
         menu.start.setOnAction(action->{
-            this.mapNB=new NoBoundariesMap(menu.getMapWidthField(),menu.getMapHeightField(),menu.getMapJungleWidthField(),menu.getMapJungleHeightField());
-            this.mapB=new BoundaryMap(menu.getMapWidthField(),menu.getMapHeightField(),menu.getMapJungleWidthField(),menu.getMapJungleHeightField());
+            this.mapNB=new NoBoundariesMap(menu.getMapWidthField(),menu.getMapHeightField(),menu.getMapJungleWidthField(),menu.getMapJungleHeightField(),menu.getMagicNB());
+            this.mapB=new BoundaryMap(menu.getMapWidthField(),menu.getMapHeightField(),menu.getMapJungleWidthField(),menu.getMapJungleHeightField(),menu.getMagicB());
             this.mapNB.setPlantEnergy(menu.getPlantEnergyField());
             this.mapB.setPlantEnergy(menu.getPlantEnergyField());
             this.mapNB.setMoveEnergy(menu.getMoveEnergyField());
@@ -83,19 +114,24 @@ public class App extends Application  {
             this.mapB.setStartEnergy(menu.getStartEnergyField());
             this.engineNB=new SimulationEngine( this.mapNB,menu.getMoveDelayField(),menu.getAnimalStartField(),menu.getGrassStartField());
             this.engineB=new SimulationEngine( this.mapB,menu.getMoveDelayField(),menu.getAnimalStartField(),menu.getGrassStartField());
-            this.mapVisB=new GridMapVisualizer(this.mapB,this.gridB);
-            this.mapVisNB=new GridMapVisualizer(this.mapNB,this.gridNB);
+            this.mapVisB=new GridMapVisualizer(this.mapB,this.gridB,this.engineB);
+            this.mapVisNB=new GridMapVisualizer(this.mapNB,this.gridNB,this.engineNB);
             this.engineNB.addObserver(this);
             this.engineB.addObserver(this);
             this.engineThreadNB = new Thread((Runnable) this.engineNB);
             this.engineThreadB = new Thread((Runnable) this.engineB);
-//            this.engineThreadNB.start();
+            this.dataVisualizerB.setMap(this.mapB);
+            this.dataVisualizerNB.setMap(this.mapNB);
+            this.engineThreadNB.start();
             this.engineThreadB.start();
 
             try{
 
-                this.mapVisB.draw();
-                this.mapVisNB.draw();
+                this.mapVisB.draw(false);
+                this.mapVisNB.draw(false);
+                this.dataVisualizerB.drawChart();
+                this.dataVisualizerNB.drawChart();
+
             }catch (FileNotFoundException ex){
                 System.out.println(ex.toString());
             }
@@ -112,16 +148,7 @@ public class App extends Application  {
         });
 
 
-
-
-
-
-//
-//        this.mapVisualizer=new GridMapVisualizer(this.map,this.grid);
-
-
-
-        Scene sceneMenu = new Scene(menuBox, 600, 600);
+        Scene sceneMenu = new Scene(menuBox, 600, 700);
 
         primaryStage.setScene(sceneMenu);
         primaryStage.show();
@@ -130,9 +157,14 @@ public class App extends Application  {
     public void newDay(){
         Platform.runLater(() -> {
                 try{
-                    this.mapVisB.draw();
-                    this.mapVisNB.draw();
-
+                    if(this.engineB.getRunState()){
+                    this.mapVisB.draw(false);
+                    }
+                    this.dataVisualizerB.updateData();
+                    if(this.engineNB.getRunState()){
+                    this.mapVisNB.draw(false);
+                    }
+                    this.dataVisualizerNB.updateData();
                 } catch (FileNotFoundException e) {
                     System.out.println("Błąd rysowania");
                 }

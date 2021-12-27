@@ -2,6 +2,7 @@ package agh.ics.oop.gui;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -20,6 +21,8 @@ public class Menu {
     protected TextField animalStartField;
     protected TextField grassStartField;
     protected TextField moveDelayField;
+    protected CheckBox magicB;
+    protected CheckBox magicNB;
     public Button start;
 
     public Menu(){
@@ -28,14 +31,14 @@ public class Menu {
 
         Text mapWidthLabel = new Text("Width: ");
         this.mapWidthField=new TextField();
-        this.mapWidthField.setText("10");
+        this.mapWidthField.setText("15");
         HBox mapWidthBox=new HBox(mapWidthLabel,this.mapWidthField);
         mapWidthBox.setSpacing(7);
         mapWidthBox.setAlignment(Pos.CENTER);
 
         Text mapHeightLabel = new Text("Height: ");
         this.mapHeightField=new TextField();
-        this.mapHeightField.setText("10");
+        this.mapHeightField.setText("15");
         HBox mapHeightBox=new HBox(mapHeightLabel,this.mapHeightField);
         mapHeightBox.setSpacing(7);
         mapHeightBox.setAlignment(Pos.CENTER);
@@ -44,14 +47,14 @@ public class Menu {
 
         Text mapJungleWidthLabel = new Text("Jungle width: ");
         this.mapJungleWidthField=new TextField();
-        this.mapJungleWidthField.setText("4");
+        this.mapJungleWidthField.setText("5");
         HBox mapJungleWidthBox=new HBox(mapJungleWidthLabel,this.mapJungleWidthField);
         mapJungleWidthBox.setSpacing(7);
         mapJungleWidthBox.setAlignment(Pos.CENTER);
 
         Text mapJungleHeightLabel = new Text("Jungle height: ");
         this.mapJungleHeightField=new TextField();
-        this.mapJungleHeightField.setText("4");
+        this.mapJungleHeightField.setText("5");
         HBox mapJungleHeightBox=new HBox(mapJungleHeightLabel,this.mapJungleHeightField);
         mapJungleHeightBox.setSpacing(7);
         mapJungleHeightBox.setAlignment(Pos.CENTER);
@@ -65,21 +68,21 @@ public class Menu {
 
         Text startEnergyLabel = new Text("Animal start energy: ");
         this.startEnergyField=new TextField();
-        this.startEnergyField.setText("40");
+        this.startEnergyField.setText("100");
         HBox startEnergyBox=new HBox(startEnergyLabel,this.startEnergyField);
         startEnergyBox.setSpacing(7);
         startEnergyBox.setAlignment(Pos.CENTER);
 
         Text plantEnergyLabel = new Text("Plant energy: ");
         this.plantEnergyField=new TextField();
-        this.plantEnergyField.setText("4");
+        this.plantEnergyField.setText("100");
         HBox plantEnergyBox=new HBox(plantEnergyLabel,this.plantEnergyField);
         plantEnergyBox.setSpacing(7);
         plantEnergyBox.setAlignment(Pos.CENTER);
 
         Text moveEnergyLabel = new Text("Move energy cost: ");
         this.moveEnergyField=new TextField();
-        this.moveEnergyField.setText("1");
+        this.moveEnergyField.setText("3");
         HBox moveEnergyBox=new HBox(moveEnergyLabel,this.moveEnergyField);
         moveEnergyBox.setSpacing(7);
         moveEnergyBox.setAlignment(Pos.CENTER);
@@ -93,14 +96,14 @@ public class Menu {
 
         Text animalStartLabel = new Text("Animals at start: ");
         this.animalStartField=new TextField();
-        this.animalStartField.setText("10");
+        this.animalStartField.setText("30");
         HBox animalStartBox=new HBox(animalStartLabel,this.animalStartField);
         animalStartBox.setSpacing(7);
         animalStartBox.setAlignment(Pos.CENTER);
 
         Text grassStartLabel = new Text("Grasses at start: ");
         this.grassStartField=new TextField();
-        this.grassStartField.setText("10");
+        this.grassStartField.setText("0");
         HBox grassStartBox=new HBox(grassStartLabel,this.grassStartField);
         grassStartBox.setSpacing(7);
         grassStartBox.setAlignment(Pos.CENTER);
@@ -114,7 +117,7 @@ public class Menu {
 
         Text moveDelayLabel = new Text("Delay (ms): ");
         this.moveDelayField=new TextField();
-        this.moveDelayField.setText("500");
+        this.moveDelayField.setText("200");
         HBox moveDelayBox=new HBox(moveDelayLabel,this.moveDelayField);
         moveDelayBox.setSpacing(7);
         moveDelayBox.setAlignment(Pos.CENTER);
@@ -124,10 +127,18 @@ public class Menu {
         moveDelayStatsBox.setAlignment(Pos.CENTER);
 
         this.start=new Button("Start");
+        Text magicBMapTitle= new Text("Map with boundaries");
+        Text magicNBMapTitle= new Text("Map without boundaries");
+        this.magicB=new CheckBox("Magic evolution");
+        this.magicNB=new CheckBox("Magic evolution");
 
+        VBox magicBMapBox=new VBox(magicBMapTitle,this.magicB);
+        VBox magicNBMapBox=new VBox(magicNBMapTitle,this.magicNB);
+        HBox magicBox=new HBox(magicBMapBox,magicNBMapBox);
+        magicBox.setAlignment(Pos.CENTER);
+        magicBox.setSpacing(50);
 
-
-        this.menu=new VBox(mapStatsBox,energyStatsBox,spawnStatsBox,moveDelayStatsBox,this.start);
+        this.menu=new VBox(mapStatsBox,energyStatsBox,spawnStatsBox,moveDelayStatsBox,magicBox,this.start);
         this.menu.setSpacing(20);
         this.menu.setAlignment(Pos.CENTER);
     }
@@ -164,5 +175,13 @@ public class Menu {
 
     public int getStartEnergyField() {
         return Integer.parseInt(startEnergyField.getText());
+    }
+
+    public boolean getMagicB() {
+        return magicB.isSelected();
+    }
+
+    public boolean getMagicNB() {
+        return magicNB.isSelected();
     }
 }

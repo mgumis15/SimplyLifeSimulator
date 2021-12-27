@@ -6,8 +6,8 @@ import java.util.LinkedHashMap;
 
 public class NoBoundariesMap extends AbstractWorldMap{
 
-    public NoBoundariesMap(int width,int height,int jungleWidth,int jungleHeight){
-        super(width,height,jungleWidth,jungleHeight);
+    public NoBoundariesMap(int width,int height,int jungleWidth,int jungleHeight,boolean magic){
+        super(width,height,jungleWidth,jungleHeight,magic);
     }
 
 

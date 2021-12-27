@@ -11,13 +11,13 @@ public class Animal implements IMapElement{
     public MapDirection direction;
     public int energy;
     public ArrayList<Integer> genes;
+    public int lifeSpan=1;
     private IWorldMap map;
-    private ArrayList<IPositionChangeObserver>  observers;
+    private int deathDay=-1;
+    public int childs=0;
     public Animal(IWorldMap map, Vector2d position, int energy){
 
         this.map=map;
-        this.observers=new ArrayList<>();
-        this.addObserver((IPositionChangeObserver) map);
         this.position=position;
         this.energy=energy;
         this.direction=MapDirection.NORTH;
@@ -47,19 +47,19 @@ public class Animal implements IMapElement{
     }
 
     public boolean move(){
+        this.lifeSpan+=1;
         int ind=new Random().nextInt(32);
         int direct=this.genes.get(ind);
         if(direct==0){
             Vector2d nextIT=this.position.add(this.direction.toUnitVector());
             if (this.map.canMoveTo(nextIT)){
-                this.positionChanged(this.position,nextIT);
                 this.position=nextIT;
                 return true;
             };
         }else if(direct==4){
             Vector2d prev=this.position.substract(this.direction.toUnitVector());
             if (this.map.canMoveTo(prev)){
-                this.positionChanged(this.position,prev);
+
                 this.position=prev;
                 return true;
             };
@@ -69,40 +69,14 @@ public class Animal implements IMapElement{
         return false;
     }
 
-    void addObserver(IPositionChangeObserver observer){
-        observers.add(observer);
-    }
-    void removeObserver(IPositionChangeObserver observer){
-        observers.remove(observer);
-    }
-    void positionChanged(Vector2d oldPosition, Vector2d newPosition){
-        for (IPositionChangeObserver observer:observers) {
-            observer.positionChanged(oldPosition,newPosition);
-        }
+    public void setDeathDay(int deathDay) {
+        this.deathDay = deathDay;
     }
 
+    public int getDeathDay() {
+        return deathDay;
+    }
 
-//    public String toString(){
-//        String odp=switch (this.direction){
-//            case NORTH -> "^";
-//            case EAST -> ">";
-//            case WEST -> "<";
-//            case SOUTH -> "v";
-//            default -> "";
-//        };
-//        return odp;
-//    }
-
-//    public String getUrl(){
-//        String odp=switch (this.direction){
-//            case NORTH -> "src/main/resources/up.png";
-//            case EAST -> "src/main/resources/left.png";
-//            case WEST -> "src/main/resources/right.png";
-//            case SOUTH -> "src/main/resources/down.png";
-//            default -> "";
-//        };
-//        return odp;
-//    }
 }
 
 

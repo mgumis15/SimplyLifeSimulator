@@ -4,8 +4,8 @@ import java.util.*;
 
 public class BoundaryMap extends AbstractWorldMap{
 
-    public BoundaryMap(int width,int height,int jungleWidth,int jungleHeight){
-        super(width,height,jungleWidth,jungleHeight);
+    public BoundaryMap(int width,int height,int jungleWidth,int jungleHeight,boolean magic){
+        super(width,height,jungleWidth,jungleHeight,magic);
     }
 
 

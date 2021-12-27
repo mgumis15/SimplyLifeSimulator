@@ -1,6 +1,8 @@
 package agh.ics.oop;
 
 
+import java.util.ArrayList;
+
 public interface IWorldMap {
 
     boolean canMoveTo(Vector2d position);
@@ -23,5 +25,27 @@ public interface IWorldMap {
 
     boolean generateStartAnimals(int animalsOnStart);
 
-    void newDayRise();
+    boolean newDayRise();
+
+    int getStartEnergy();
+
+    Integer getDays();
+
+    Integer getAnimalsQuant();
+
+    Integer getGrassQuant();
+
+    Integer getEnergyMean();
+
+    Integer getAnimalsLifespanMean();
+
+    void choseAnimal(Animal animal);
+
+    Animal getChosenAnimal();
+
+    int getMagic();
+
+    ArrayList<Integer> getGensDominant();
+
+    Double getAverageChilds();
 }
