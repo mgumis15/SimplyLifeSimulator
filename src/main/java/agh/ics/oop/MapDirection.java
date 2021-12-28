@@ -24,8 +24,8 @@ public enum MapDirection {
         }
     }
 
-    public MapDirection next(int direct){
-        for (int i = 0; i < direct; i++) {
+    public MapDirection next(){
+
             switch (this) {
                 case NORTH:
                     return NORTH_EAST;
@@ -44,18 +44,8 @@ public enum MapDirection {
                 default:
                     return NORTH;
             }
-        }
-        return this;
     }
 
-//    public MapDirection previous(){
-//        switch(this) {
-//            case NORTH: return WEST;
-//            case SOUTH: return EAST;
-//            case WEST: return SOUTH;
-//            default: return NORTH;
-//        }
-//    }
 
     public Vector2d toUnitVector(){
         switch(this) {

@@ -15,6 +15,7 @@ public class Animal implements IMapElement{
     private IWorldMap map;
     private int deathDay=-1;
     public int childs=0;
+    public boolean tracked=false;
     public Animal(IWorldMap map, Vector2d position, int energy){
 
         this.map=map;
@@ -23,8 +24,10 @@ public class Animal implements IMapElement{
         this.direction=MapDirection.NORTH;
         this.genes=new ArrayList<Integer>();
         int randomDirection=new Random().nextInt(8);
+        for (int i = 0; i < randomDirection; i++) {
 
-        this.direction=this.direction.next(randomDirection);
+        this.direction=this.direction.next();
+        }
 
         for (int i = 0; i < 32; i++) {
             this.genes.add(new Random().nextInt(8));
@@ -64,7 +67,10 @@ public class Animal implements IMapElement{
                 return true;
             };
         }else{
-                this.direction=this.direction.next(direct);
+            for (int i = 0; i <direct ; i++) {
+                this.direction=this.direction.next();
+            }
+
         }
         return false;
     }

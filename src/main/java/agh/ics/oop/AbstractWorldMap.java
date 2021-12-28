@@ -23,7 +23,8 @@ abstract class AbstractWorldMap implements IWorldMap {
     protected int days=0;
     protected int magic=-1;
     protected int allChilds=0;
-
+    protected int trackedChildren=0;
+    protected int trackedDescendants=0;
 
     public AbstractWorldMap(int width,int height,int jungleWidth,int jungleHeight,boolean magic){
         this.width=width;
@@ -38,6 +39,7 @@ abstract class AbstractWorldMap implements IWorldMap {
 
 
     public boolean newDayRise(){
+
     this.days+=1;
     this.removeDeadAnimals();
     if(this.animals.size() <= 5 && this.magic>0){
@@ -128,6 +130,8 @@ abstract class AbstractWorldMap implements IWorldMap {
 
 
     public void bornAnimal(Animal parent1,Animal parent2){
+        if(this.chosenAnimal==parent1 || this.chosenAnimal==parent2)this.trackedChildren+=1;
+
             this.allChilds+=1;
             parent1.childs+=1;
             parent2.childs+=1;
@@ -149,6 +153,10 @@ abstract class AbstractWorldMap implements IWorldMap {
             parent1.energy-=(int) Math.floor(parent1.energy/4);
             parent2.energy-=(int) Math.floor(parent2.energy/4);
         this.placeAnimal(child);
+        if(parent1.tracked || parent2.tracked || this.chosenAnimal==parent1 || this.chosenAnimal==parent2){
+            child.tracked=true;
+            this.trackedDescendants+=1;
+        }
         for (int i = 0; i < 32; i++) {
             if(side){
               if(i<=slicePoint){
@@ -406,8 +414,13 @@ public ArrayList<Animal> animalsAt(Vector2d position) {
         if(this.animals.size()>0) return this.energySum/this.animals.size();
         else return 0;
     }
-    public void choseAnimal(Animal animal){
-        this.chosenAnimal=animal;
+    public void choseAnimal(Animal newChosen){
+        this.chosenAnimal=newChosen;
+        for (Animal animal:this.animals) {
+            animal.tracked=false;
+        }
+        this.trackedDescendants=0;
+        this.trackedChildren=0;
     };
     public Animal getChosenAnimal() {
         return chosenAnimal;
@@ -439,5 +452,11 @@ public ArrayList<Animal> animalsAt(Vector2d position) {
         }else{
             return 0.0;
         }
+    }
+    public int getChosenChildren(){
+        return this.trackedChildren;
+    }
+    public int getChosenDescendants(){
+        return this.trackedDescendants;
     }
 }

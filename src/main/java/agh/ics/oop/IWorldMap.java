@@ -48,4 +48,8 @@ public interface IWorldMap {
     ArrayList<Integer> getGensDominant();
 
     Double getAverageChilds();
+
+    int getChosenChildren();
+
+    int getChosenDescendants();
 }

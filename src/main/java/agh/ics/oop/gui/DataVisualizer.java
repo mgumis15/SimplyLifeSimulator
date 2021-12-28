@@ -2,6 +2,7 @@ package agh.ics.oop.gui;
 
 import agh.ics.oop.Animal;
 import agh.ics.oop.IWorldMap;
+import agh.ics.oop.data.DataContainer;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -25,7 +26,8 @@ public class DataVisualizer {
     protected Text genesText=new Text();
     protected Text magicGenerations=new Text();
     protected Text genesDominant=new Text();
-
+    protected DataContainer dataContainer=new DataContainer();
+    protected int lastDay=-1;
     public DataVisualizer(){
         this.statsBox.getChildren().addAll(this.genesText,this.childsText,this.descendantsText,this.deathText);
     }
@@ -72,12 +74,22 @@ public class DataVisualizer {
 
     }
     public void updateData(){
-        this.dataAnimals.getData().add(new XYChart.Data( this.map.getDays(), this.map.getAnimalsQuant()));
-        this.dataGrass.getData().add(new XYChart.Data( this.map.getDays(), this.map.getGrassQuant()));
-        this.dataEnergy.getData().add(new XYChart.Data( this.map.getDays(), this.map.getEnergyMean()));
-        this.dataLifeSpan.getData().add(new XYChart.Data( this.map.getDays(), this.map.getAnimalsLifespanMean()));
-        this.dataChilds.getData().add(new XYChart.Data( this.map.getDays(), this.map.getAverageChilds()));
+        int days=this.map.getDays();
+        if(this.lastDay!=days){
+        this.lastDay=days;
+        int animalsQuantity=this.map.getAnimalsQuant();
+        int grassQuantity= this.map.getGrassQuant();
+        int energyMean=this.map.getEnergyMean();
+        int animalsLifeSpan=this.map.getAnimalsLifespanMean();
+        Double childs=this.map.getAverageChilds();
+        this.dataAnimals.getData().add(new XYChart.Data( days,animalsQuantity ));
+        this.dataGrass.getData().add(new XYChart.Data( days,grassQuantity));
+        this.dataEnergy.getData().add(new XYChart.Data( days,energyMean ));
+        this.dataLifeSpan.getData().add(new XYChart.Data( days,animalsLifeSpan ));
+        this.dataChilds.getData().add(new XYChart.Data( days,childs ));
         this.drawAnimalStats();
+        this.dataContainer.addData(days,animalsQuantity,grassQuantity,energyMean,animalsLifeSpan,childs);
+        }
         if(this.map.getMagic()>=0){
 
         this.magicGenerations.setText("Magic generatios: "+this.map.getMagic());
@@ -94,8 +106,8 @@ public class DataVisualizer {
         Animal animal=this.map.getChosenAnimal();
         if(animal!=null){
             this.genesText.setText("Genom: "+animal.genes.toString());
-            this.childsText.setText("Childs: "+animal.genes.toString());
-            this.descendantsText.setText("Descendants: "+animal.genes.toString());
+            this.childsText.setText("Childs: "+this.map.getChosenChildren());
+            this.descendantsText.setText("Descendants: "+this.map.getChosenDescendants());
             if(animal.getDeathDay()>0){
             this.deathText.setText("Death: "+animal.getDeathDay());
             }else{

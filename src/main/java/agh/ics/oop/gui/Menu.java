@@ -134,7 +134,7 @@ public class Menu {
 
         VBox magicBMapBox=new VBox(magicBMapTitle,this.magicB);
         VBox magicNBMapBox=new VBox(magicNBMapTitle,this.magicNB);
-        HBox magicBox=new HBox(magicBMapBox,magicNBMapBox);
+        HBox magicBox=new HBox(magicNBMapBox,magicBMapBox);
         magicBox.setAlignment(Pos.CENTER);
         magicBox.setSpacing(50);
 

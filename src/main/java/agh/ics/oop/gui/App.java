@@ -14,6 +14,7 @@ import javafx.stage.WindowEvent;
 
 import java.beans.EventHandler;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class App extends Application  {
 
@@ -87,9 +88,29 @@ public class App extends Application  {
                 };
             }
         });
-        HBox buttonsB=new HBox(stopB,showDomGenButtonB);
+        Button saveDataB=new Button("Save");
+        saveDataB.setOnAction(action ->{
+            if(!this.engineB.getRunState()){
+                try{
+                    this.dataVisualizerB.dataContainer.saveData();
+                }catch (IOException e){
+                    System.out.println("Cannot save data");
+                }
+            }
+        });
+        Button saveDataNB=new Button("Save");
+        saveDataNB.setOnAction(action ->{
+            if(!this.engineNB.getRunState()){
+                try{
+                this.dataVisualizerNB.dataContainer.saveData();
+                }catch (IOException e){
+                    System.out.println("Cannot save data");
+                }
+            }
+        });
+        HBox buttonsB=new HBox(stopB,showDomGenButtonB,saveDataB);
         buttonsB.setSpacing(10);
-        HBox buttonsNB=new HBox(stopNB,showDomGenButtonNB);
+        HBox buttonsNB=new HBox(stopNB,showDomGenButtonNB,saveDataNB);
         buttonsNB.setSpacing(10);
         Label gridBLabel=new Label("With boundaries map");
         Label gridNBLabel=new Label("Without boundaries map");
@@ -100,7 +121,7 @@ public class App extends Application  {
         VBox gridNBBox=new VBox(gridNBLabel,buttonsNB,this.gridNB,this.dataVisualizerNB.getDataBox());
         gridBBox.setSpacing(15);
         gridNBBox.setSpacing(15);
-        HBox mapBox=new HBox(gridBBox,gridNBBox);
+        HBox mapBox=new HBox(gridNBBox,gridBBox);
         mapBox.setSpacing(30);
         Scene sceneMain=new Scene(mapBox,1100,1100);
         menu.start.setOnAction(action->{
