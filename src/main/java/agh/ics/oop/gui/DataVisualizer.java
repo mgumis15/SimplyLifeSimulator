@@ -87,9 +87,10 @@ public class DataVisualizer {
         this.dataEnergy.getData().add(new XYChart.Data( days,energyMean ));
         this.dataLifeSpan.getData().add(new XYChart.Data( days,animalsLifeSpan ));
         this.dataChilds.getData().add(new XYChart.Data( days,childs ));
-        this.drawAnimalStats();
+
         this.dataContainer.addData(days,animalsQuantity,grassQuantity,energyMean,animalsLifeSpan,childs);
         }
+        this.drawAnimalStats();
         if(this.map.getMagic()>=0){
 
         this.magicGenerations.setText("Magic generatios: "+this.map.getMagic());

@@ -120,7 +120,7 @@ public class GridMapVisualizer {
                     }
                     if(genes.size()>0){
                         if(((Animal) object).genes.equals(genes)){
-                            cic.setStroke(Color.BLUE);
+                            cic.setStroke(Color.rgb(0,255,255));
                             cic.setStrokeWidth(2);
                             cic.setStrokeType(StrokeType.INSIDE);
                         }

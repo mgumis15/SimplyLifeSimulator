@@ -10,11 +10,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-
-import java.beans.EventHandler;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 
 public class App extends Application  {
 
@@ -30,11 +28,18 @@ public class App extends Application  {
     protected Thread engineThreadNB;
     protected DataVisualizer dataVisualizerB=new DataVisualizer();
     protected DataVisualizer dataVisualizerNB=new DataVisualizer();
+    protected OptionsParser parser=new OptionsParser();
+    protected boolean gradleArguments=false;
     public void init(){
         try {
 
             System.out.println("system wystartował");
+            if(getParameters().getRaw().size()>0){
+            this.parser.parse(getParameters().getRaw());
+            this.gradleArguments=true;
+            }
         }catch(IllegalArgumentException ex){
+            this.gradleArguments=false;
             System.out.println(ex.toString());
         }
     }
@@ -42,6 +47,7 @@ public class App extends Application  {
     public void start(Stage primaryStage){
 
         System.out.println("Odpalamy grafę");
+        System.out.println(this.gradleArguments);
         Menu menu=new Menu();
         VBox menuBox=menu.getMenu();
         this.gridNB=new GridPane();
@@ -168,11 +174,54 @@ public class App extends Application  {
 
         });
 
+        if(!this.gradleArguments){
 
         Scene sceneMenu = new Scene(menuBox, 600, 700);
-
         primaryStage.setScene(sceneMenu);
         primaryStage.show();
+        }else{
+
+            this.mapNB=new NoBoundariesMap(this.parser.getMapWidthField(),this.parser.getMapHeightField(),this.parser.getMapJungleWidthField(),this.parser.getMapJungleHeightField(),this.parser.getMagicNB());
+            this.mapB=new BoundaryMap(this.parser.getMapWidthField(),this.parser.getMapHeightField(),this.parser.getMapJungleWidthField(),this.parser.getMapJungleHeightField(),this.parser.getMagicB());
+            this.mapNB.setPlantEnergy(this.parser.getPlantEnergyField());
+            this.mapB.setPlantEnergy(this.parser.getPlantEnergyField());
+            this.mapNB.setMoveEnergy(this.parser.getMoveEnergyField());
+            this.mapB.setMoveEnergy(this.parser.getMoveEnergyField());
+            this.mapNB.setStartEnergy(this.parser.getStartEnergyField());
+            this.mapB.setStartEnergy(this.parser.getStartEnergyField());
+            this.engineNB=new SimulationEngine( this.mapNB,this.parser.getMoveDelayField(),this.parser.getAnimalStartField(),this.parser.getGrassStartField());
+            this.engineB=new SimulationEngine( this.mapB,this.parser.getMoveDelayField(),this.parser.getAnimalStartField(),this.parser.getGrassStartField());
+            this.mapVisB=new GridMapVisualizer(this.mapB,this.gridB,this.engineB);
+            this.mapVisNB=new GridMapVisualizer(this.mapNB,this.gridNB,this.engineNB);
+            this.engineNB.addObserver(this);
+            this.engineB.addObserver(this);
+            this.engineThreadNB = new Thread((Runnable) this.engineNB);
+            this.engineThreadB = new Thread((Runnable) this.engineB);
+            this.dataVisualizerB.setMap(this.mapB);
+            this.dataVisualizerNB.setMap(this.mapNB);
+            this.engineThreadNB.start();
+            this.engineThreadB.start();
+
+            try{
+
+                this.mapVisB.draw(false);
+                this.mapVisNB.draw(false);
+                this.dataVisualizerB.drawChart();
+                this.dataVisualizerNB.drawChart();
+
+            }catch (FileNotFoundException ex){
+                System.out.println(ex.toString());
+            }
+
+            primaryStage.setScene(sceneMain);
+            primaryStage.show();
+            primaryStage.setOnCloseRequest(event -> {
+                this.engineNB.endRun();
+                this.engineB.endRun();
+                Platform.exit();
+                System.out.println("system zakończył działanie");
+            });
+        }
 
     }
     public void newDay(){
