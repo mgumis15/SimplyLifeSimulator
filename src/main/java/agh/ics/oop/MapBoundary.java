@@ -1,10 +1,5 @@
 package agh.ics.oop;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
-
 public class MapBoundary {
     public Vector2d lowerCorner,upperCorner,jnglLowCorner,jnglUppCorner;
 

@@ -22,13 +22,7 @@ public class SimulationEngine implements IEngine,Runnable{
             this.killThread.set(true);
         }
         this.map.generateStartGrasses(grassOnStart);
-//        for (int i = 0; i < animalsOnStart; i++) {
-//
-//            Animal newAnimal=new Animal(this.map);
-//
-//            this.map.place(newAnimal);
-//            this.animals.add(newAnimal);
-//        }
+
     }
     public void addObserver(App observer){
 
@@ -65,12 +59,6 @@ public class SimulationEngine implements IEngine,Runnable{
                 for (App app:this.observers){
                     app.newDay();
                 }
-
-
         }
-
     }
-
-
-
 }

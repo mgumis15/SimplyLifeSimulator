@@ -1,20 +1,15 @@
 package agh.ics.oop.gui;
 
 import agh.ics.oop.*;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
-
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -138,9 +133,7 @@ public class GridMapVisualizer {
                     }else if(animE>=0&& animE<0.25*startE){
                         cic.setFill(Color.rgb(255, 255, 204));
                     }
-//                    cic.setOnMouseClicked(event->{
-//                        System.out.println(object.toString());
-//                    });
+
                     cic.setOnMouseClicked(event -> {
                         if(!this.engine.getRunState()){
                             this.map.choseAnimal((Animal) object);

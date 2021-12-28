@@ -1,6 +1,6 @@
 package agh.ics.oop;
 
-import java.util.*;
+
 
 public class BoundaryMap extends AbstractWorldMap{
 

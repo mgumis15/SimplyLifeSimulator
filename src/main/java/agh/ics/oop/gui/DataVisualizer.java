@@ -107,7 +107,7 @@ public class DataVisualizer {
         Animal animal=this.map.getChosenAnimal();
         if(animal!=null){
             this.genesText.setText("Genom: "+animal.genes.toString());
-            this.childsText.setText("Childs: "+this.map.getChosenChildren());
+            this.childsText.setText("Children: "+this.map.getChosenChildren());
             this.descendantsText.setText("Descendants: "+this.map.getChosenDescendants());
             if(animal.getDeathDay()>0){
             this.deathText.setText("Death: "+animal.getDeathDay());

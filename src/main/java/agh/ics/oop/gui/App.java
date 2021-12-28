@@ -40,14 +40,13 @@ public class App extends Application  {
             }
         }catch(IllegalArgumentException ex){
             this.gradleArguments=false;
-            System.out.println(ex.toString());
+            System.out.println(ex);
         }
     }
     @Override
     public void start(Stage primaryStage){
 
         System.out.println("Odpalamy grafę");
-        System.out.println(this.gradleArguments);
         Menu menu=new Menu();
         VBox menuBox=menu.getMenu();
         this.gridNB=new GridPane();
@@ -91,7 +90,7 @@ public class App extends Application  {
                     this.mapVisNB.draw(true);
                 } catch (FileNotFoundException e) {
                     System.out.println("Błąd rysowania");
-                };
+                }
             }
         });
         Button saveDataB=new Button("Save");

@@ -2,7 +2,6 @@ package agh.ics.oop;
 
 import agh.ics.oop.gui.App;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The interface responsible for managing the moves of the animals.

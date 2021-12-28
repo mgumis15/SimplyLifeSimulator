@@ -1,11 +1,10 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
-public class Animal implements IMapElement{
+public class Animal {
 
     public Vector2d position;
     public MapDirection direction;
